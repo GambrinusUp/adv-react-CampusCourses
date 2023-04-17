@@ -33,13 +33,29 @@ const styles = {
         textDecoration: 'none',
         outline: 'none',
         paddingRight: '10px'
+    },
+    navbar_text_after_title: {
+        paddingLeft: "30px",
+        display: "inline-block",
+        fontStyle: "normal",
+        fontSize: "20px",
+        color: "#FFFFFF",
+        alignItems: "center",
+        justifyContent: "center",
+        marginRight: '10px',
+        textDecoration: 'none',
+        outline: 'none',
+        paddingRight: '10px'
     }
 };
 
 const Navbar = () => {
     return (
         <nav style={styles.navbar}>
-            <div style={styles.navbar_title}>Кампусные курсы</div>
+            <div style={styles.navbar_title}>Кампусные курсы
+                <Link to="/registration" style={styles.navbar_text_after_title}>Группы курсов</Link>
+                <Link to="/authorization" style={styles.navbar_text}>Мои курсы</Link>
+            </div>
             <div>
                 <Link to="/registration" style={styles.navbar_text}>Регистрация</Link>
                 <Link to="/authorization" style={styles.navbar_text}>Вход</Link>

@@ -8,7 +8,10 @@ import {login, logout} from "../store/authorizeReducer";
 
 const Authorization = ({token}) => {
     const dispatch = useDispatch();
+    //const myData = useSelector((state) => state);
     const onFinish = (values) => {
+        //console.log(myData);
+        console.log(token);
         const { email, password } = values;
         dispatch(login(email, password))
             .then(() => {
@@ -26,15 +29,17 @@ const Authorization = ({token}) => {
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
                 <Card
                     style={{
-                        width: 1400,
+                        minWidth: 1000,
+                        width: "70%",
                         height: 800,
                         backgroundColor: "#78A1BB",
                         borderRadius: "20px"
                     }}
                 >
                     <div style={{
+                        paddingTop: 50,
                         fontStyle: "normal",
-                        fontSize: "64px",
+                        fontSize: "60px",
                         display: "flex",
                         justifyContent: "center",
                         color: "#FFFFFF"
@@ -53,7 +58,7 @@ const Authorization = ({token}) => {
                                         message: 'Please input your Email!',
                                     },
                                 ]}
-                                style={{paddingTop: "40px", width: "1200px"}}
+                                style={{paddingTop: "40px", minWidth: 800, width: "100%"}}
                             >
                                 <Input prefix={<MailOutlined style={{ fontSize: '20px'}} />} placeholder="Email" style={{ height: "50px" }}/>
                             </Form.Item>
@@ -65,7 +70,7 @@ const Authorization = ({token}) => {
                                         message: 'Please input your Password!',
                                     },
                                 ]}
-                                style={{paddingTop: "40px"}}
+                                style={{paddingTop: "40px", minWidth: 800, width: "100%"}}
                             >
                                 <Input
                                     prefix={<LockOutlined className="site-form-item-icon" style={{ fontSize: '20px'}} />}
