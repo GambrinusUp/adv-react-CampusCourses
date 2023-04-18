@@ -3,7 +3,7 @@ import Navbar from "../UI/navbar";
 import {Card, DatePicker} from "antd";
 import {LockOutlined, MailOutlined, UserOutlined} from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
-import {login, logout, registration} from "../store/authorizeReducer";
+import {login, logout, registration1} from "../store/authorizeReducer";
 import {connect, useDispatch} from "react-redux";
 const dateFormat = 'YYYY-MM-DD';
 const Registration = ({token}) => {
@@ -11,7 +11,7 @@ const Registration = ({token}) => {
     const onFinish = (values) => {
         console.log(values.date.format(dateFormat));
         console.log(values);
-        dispatch(registration(values.username, values.date.format(dateFormat) + 'T12:05:39.949Z', values.email, values.password1, values.password2))
+        dispatch(registration1(values.username, values.date.format(dateFormat) + 'T12:05:39.949Z', values.email, values.password1, values.password2))
             .then(() => {
                 console.log("Logged in successfully");
                 console.log(token);
@@ -147,4 +147,4 @@ function mapStateToProps(state) {
     return { token: state.authorizePage.token };
 }
 
-export default connect(mapStateToProps, {login, registration, logout})(Registration);
+export default connect(mapStateToProps, {login, registration1, logout})(Registration);

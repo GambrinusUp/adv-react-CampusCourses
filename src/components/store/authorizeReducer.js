@@ -3,11 +3,15 @@ import {authorizeAPI} from "../API/authorizeAPI";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGIN_FAIL = "LOGIN_FAIL";
 const LOGOUT = "LOGOUT";
+const GET_ROLE = "GET_ROLE";
 
 let initialState = {
     token: '',
     error: '',
-    role: ''
+    "isTeacher": false,
+    "isStudent": false,
+    "isAdmin": false,
+    email: ''
 };
 
 const authReducer = (state = initialState, action) => {
@@ -16,14 +20,21 @@ const authReducer = (state = initialState, action) => {
         case LOGIN_SUCCESS:
             console.log('success');
             newState.token = action.data.token;
+            newState.email = action.data.email;
             newState.error = '';
             return newState
         case LOGIN_FAIL:
             newState.token = '';
+            newState.email = '';
             newState.error = 'Invalid data';
             return newState
         case LOGOUT:
             newState.token = '';
+            return newState
+        case GET_ROLE:
+            newState.isAdmin = action.data.isAdmin;
+            newState.isTeacher = action.data.isTeacher;
+            newState.isStudent = action.data.isStudent;
             return newState
         default:
             return state;
@@ -50,14 +61,14 @@ export const login = (email, password) => (dispatch) => {       //изменит
             }
             dispatch({
                 type: LOGIN_SUCCESS,
-                data: { token: data },
+                data: { token: data, email: email },
             });
             return Promise.resolve();
         }
     );
 };
 
-export const registration = (fullName, birthDate, email, password, confirmPassword) => (dispatch) => {
+export const registration1 = (fullName, birthDate, email, password, confirmPassword) => (dispatch) => {
   return authorizeAPI.registration(fullName, birthDate, email, password, confirmPassword).then(
       (data) => {
           console.log(data);
@@ -77,11 +88,40 @@ export const registration = (fullName, birthDate, email, password, confirmPasswo
   );
 };
 
-export const logout = () => (dispatch) => {
-    authorizeAPI.logout();
-    dispatch({
-        type: LOGOUT,
-    });
+export const logout = (token) => (dispatch) => {
+    return authorizeAPI.logout(token).then (
+        (status) => {
+            console.log(status);
+            if(status !== 200) {
+                console.log("error");
+                return Promise.reject();
+            }
+            dispatch({
+                type: LOGOUT,
+            });
+            return Promise.resolve();
+        }
+    );
+};
+
+export const getUserRole = (token) => (dispatch) => {
+    return authorizeAPI.role(token).then (
+        (data) => {
+            if(data === '') {
+                console.log("failed to get role");
+                return Promise.reject();
+            }
+            dispatch({
+                type: GET_ROLE,
+                data: {
+                    isTeacher: data.isTeacher,
+                    isStudent: data.isStudent,
+                    isAdmin: data.isAdmin
+                }
+            });
+            return Promise.resolve();
+        }
+    );
 };
 
 export function loginThunkCreator(email, password) {
