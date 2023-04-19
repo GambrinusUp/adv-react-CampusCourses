@@ -3,11 +3,14 @@ import Navbar from "../UI/navbar";
 import {Card} from "antd";
 import {LockOutlined, MailOutlined} from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
-import {connect, useDispatch} from "react-redux";
-import {login, logout} from "../store/authorizeReducer";
+import {connect, useDispatch, useSelector} from "react-redux";
+import {getUserRole, login, logout} from "../store/authorizeReducer";
+import { useNavigate } from 'react-router-dom';
 
 const Authorization = ({token}) => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const teacher = useSelector(state => state.authorizePage.isTeacher);
     //const myData = useSelector((state) => state);
     const onFinish = (values) => {
         //console.log(myData);
@@ -17,6 +20,12 @@ const Authorization = ({token}) => {
             .then(() => {
                 console.log("Logged in successfully");
                 console.log(token);
+                let userToken = localStorage.getItem("token");
+                if (userToken !== '' && userToken !== null){
+                    dispatch(getUserRole(userToken));
+                    console.log(teacher);
+                    navigate('/', {replace: true});
+                }
             })
             .catch(() => {
                 console.log("Failed to login");

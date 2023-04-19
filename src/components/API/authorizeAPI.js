@@ -9,12 +9,12 @@ function login(email, password) {
     })
         .then((response) => {
             console.log(response.data.token);
-            localStorage.setItem("user", response.data.token);
+            localStorage.setItem("token", response.data.token);
             return response.data.token;
         })
         .catch((error) => {
             console.log(error.response.status);
-            localStorage.setItem("user", '');
+            localStorage.setItem("token", '');
             return '';
         });
 }
@@ -25,25 +25,78 @@ function registration(fullName, birthDate, email, password, confirmPassword) {
         birthDate: birthDate,
         email: email,
         password: password,
-        confirmPassword
+        confirmPassword: confirmPassword
     })
         .then((response) => {
             console.log(response);
             console.log(response.data.token);
-            localStorage.setItem("user", response.data.token);
+            localStorage.setItem("token", response.data.token);
             return response.data.token;
         })
         .catch((error) => {
             console.log(error);
             console.log(error.response.status);
-            localStorage.setItem("user", '');
+            localStorage.setItem("token", '');
             return '';
         });
 }
 
-function logout() {
-    localStorage.removeItem("user");
-    console.log('logout');
+function logout(token) {
+    /*localStorage.removeItem("token");
+    console.log('logout');*/
+
+    return axios.post(API_URL + "logout", null, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((response) => {
+            console.log(response);
+            console.log(response.data);
+            localStorage.setItem("token", '');
+            return response.status;
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log(error.response.status);
+            return error.response.status;
+        });
+}
+
+function role(token) {
+    return axios.get(API_URL + "roles", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((response) => {
+            console.log(response);
+            console.log(response.data);
+            return response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log(error.response.status);
+            return '';
+        });
+}
+
+function profile(token) {
+    return axios.get(API_URL + "profile", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((response) => {
+            console.log(response);
+            console.log(response.data);
+            return response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log(error.response.status);
+            return '';
+        });
 }
 
 /*function register() {
@@ -53,5 +106,7 @@ function logout() {
 export const authorizeAPI = {
     login : login,
     logout : logout,
-    registration : registration
+    registration : registration,
+    role : role,
+    profile : profile
 }
