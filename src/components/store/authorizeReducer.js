@@ -4,6 +4,7 @@ const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGIN_FAIL = "LOGIN_FAIL";
 const LOGOUT = "LOGOUT";
 const GET_ROLE = "GET_ROLE";
+const GET_PROFILE = "GET_PROFILE";
 
 let initialState = {
     token: '',
@@ -11,7 +12,10 @@ let initialState = {
     "isTeacher": false,
     "isStudent": false,
     "isAdmin": false,
-    email: ''
+    email: '',
+    fullName: '',
+    birthDate: ''
+
 };
 
 const authReducer = (state = initialState, action) => {
@@ -36,9 +40,34 @@ const authReducer = (state = initialState, action) => {
             newState.isTeacher = action.data.isTeacher;
             newState.isStudent = action.data.isStudent;
             return newState
+        case GET_PROFILE:
+            newState.email = action.data.email;
+            newState.fullName = action.data.fullName;
+            newState.birthDate = action.data.birthDate;
+            return newState
         default:
             return state;
     }
+};
+
+export const getProfile = (token) => (dispatch) => {       //изменить
+    return authorizeAPI.profile(token).then(
+        (data) => {
+            console.log(data);
+            if(data === '') {
+                console.log("error");
+                dispatch({
+                    type: LOGIN_FAIL,
+                });
+                return Promise.reject();
+            }
+            dispatch({
+                type: GET_PROFILE,
+                data: { email: data.email, birthDate: data.birthDate, fullName: data.fullName },
+            });
+            return Promise.resolve();
+        }
+    );
 };
 
 export function loginActionCreator(token) {

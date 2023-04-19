@@ -64,7 +64,7 @@ const Navbar = () => {
         } else {
             setIsLoggedIn(false);
         }
-    }, []);
+    }, [dispatch, userEmail]);
     const logoutUser = () => {
         let token = localStorage.getItem("token");
         console.log(token);
