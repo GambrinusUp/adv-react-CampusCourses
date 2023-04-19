@@ -81,6 +81,24 @@ function role(token) {
         });
 }
 
+function profile(token) {
+    return axios.get(API_URL + "profile", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((response) => {
+            console.log(response);
+            console.log(response.data);
+            return response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log(error.response.status);
+            return '';
+        });
+}
+
 /*function register() {
 
 }*/
@@ -89,5 +107,6 @@ export const authorizeAPI = {
     login : login,
     logout : logout,
     registration : registration,
-    role : role
+    role : role,
+    profile : profile
 }
