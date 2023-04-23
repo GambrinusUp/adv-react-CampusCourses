@@ -5,6 +5,7 @@ const LOGIN_FAIL = "LOGIN_FAIL";
 const LOGOUT = "LOGOUT";
 const GET_ROLE = "GET_ROLE";
 const GET_PROFILE = "GET_PROFILE";
+const EDIT_SUCCESS = "EDIT_SUCCESS";
 
 let initialState = {
     token: '',
@@ -15,7 +16,6 @@ let initialState = {
     email: '',
     fullName: '',
     birthDate: ''
-
 };
 
 const authReducer = (state = initialState, action) => {
@@ -45,9 +45,28 @@ const authReducer = (state = initialState, action) => {
             newState.fullName = action.data.fullName;
             newState.birthDate = action.data.birthDate;
             return newState
+        case EDIT_SUCCESS:
+            newState.fullName = action.data.fullName;
+            newState.birthDate = action.data.birthDate;
+            return newState
         default:
             return state;
     }
+};
+
+export const editProfile = (token, fullName, birthDate) => (dispatch) => {
+    return authorizeAPI.editProfile(token, fullName, birthDate).then(
+        (data) => {
+            if(data === 200) {
+                dispatch({
+                    type: EDIT_SUCCESS,
+                    data: { fullName: fullName, birthDate: birthDate }
+                });
+                return Promise.resolve();
+            }
+            return Promise.reject();
+        }
+    )
 };
 
 export const getProfile = (token) => (dispatch) => {       //изменить

@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Input, Form, DatePicker, Button, Card} from "antd";
 import {MailOutlined, UserOutlined} from "@ant-design/icons";
-import {getProfile} from "../store/authorizeReducer";
+import {editProfile, getProfile} from "../store/authorizeReducer";
 import {useForm} from "antd/es/form/Form";
 import moment from "moment";
 //import moment from 'moment';
@@ -31,8 +31,15 @@ const Profile = () => {
         }
     }, [dispatch, email, form, fullName, date]);
     const onFinish = (values) => {
+        const token = localStorage.getItem("token");
         console.log('Received values of form: ', values);
-        console.log(moment(values.birthday).format('YYYY-MM-DD'))
+        dispatch(editProfile(token, values.fullName, values.birthday.format('YYYY-MM-DD')))
+            .then(() => {
+                console.log("Edit success");
+                })
+            .catch(() => {
+                console.log("Failed to edit");
+            });
     };
     return (
         <div style={{backgroundColor: "#EBF5EE", width: "100%", height: "1000px"}}>
@@ -60,7 +67,7 @@ const Profile = () => {
                             display: "flex",
                             justifyContent: "center",
                             color: "#FFFFFF"
-                        }}>Профиль{fullName}</div>
+                        }}>Профиль</div>
                     </Form.Item>
                     <Form.Item
                         name="fullName"

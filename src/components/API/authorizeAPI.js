@@ -19,6 +19,25 @@ function login(email, password) {
         });
 }
 
+function editProfile(token, fullName, birthDate) {
+    return axios.put(API_URL + "profile", {
+            "fullName": fullName,
+            "birthDate": birthDate + "T18:38:36.191Z"
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then((response) => {
+            return response.status;
+        })
+        .catch((error) => {
+            console.log(error);
+            return error.response.status;
+        })
+}
+
 function registration(fullName, birthDate, email, password, confirmPassword) {
     return axios.post(API_URL + "registration", {
         fullName: fullName,
@@ -108,5 +127,6 @@ export const authorizeAPI = {
     logout : logout,
     registration : registration,
     role : role,
-    profile : profile
+    profile : profile,
+    editProfile : editProfile
 }
