@@ -84,8 +84,8 @@ const Navbar = () => {
             <div style={styles.navbar_title}>Кампусные курсы
                 {isLoggedIn && (
                     <>
-                        <Link to="/registration" style={styles.navbar_text_after_title}>Группы курсов</Link>
-                        <Link to="/authorization" style={styles.navbar_text}>Мои курсы</Link>
+                        <Link to="/groups" style={styles.navbar_text_after_title}>Группы курсов</Link>
+                        <Link to="/" style={styles.navbar_text}>Мои курсы</Link>
                     </>
                 )}
             </div>
