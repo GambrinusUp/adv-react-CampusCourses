@@ -8,12 +8,12 @@ function login(email, password) {
         password: password
     })
         .then((response) => {
-            console.log(response.data.token);
+            //console.log(response.data.token);
             localStorage.setItem("token", response.data.token);
             return response.data.token;
         })
         .catch((error) => {
-            console.log(error.response.status);
+            //console.log(error.response.status);
             localStorage.setItem("token", '');
             return '';
         });
@@ -28,14 +28,14 @@ function registration(fullName, birthDate, email, password, confirmPassword) {
         confirmPassword: confirmPassword
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data.token);
+            /*console.log(response);
+            console.log(response.data.token);*/
             localStorage.setItem("token", response.data.token);
             return response.data.token;
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
+            /*console.log(error);
+            console.log(error.response.status);*/
             localStorage.setItem("token", '');
             return '';
         });
@@ -51,14 +51,14 @@ function logout(token) {
         },
     })
         .then((response) => {
-            console.log(response);
+            /*console.log(response);
             console.log(response.data);
-            localStorage.setItem("token", '');
+            localStorage.setItem("token", '');*/
             return response.status;
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
+            /*console.log(error);
+            console.log(error.response.status);*/
             return error.response.status;
         });
 }
@@ -70,13 +70,13 @@ function role(token) {
         },
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
+            /*console.log(response);
+            console.log(response.data);*/
             return response.data;
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
+            /*console.log(error);
+            console.log(error.response.status);*/
             return '';
         });
 }
@@ -88,13 +88,13 @@ function profile(token) {
         },
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
+            /*console.log(response);
+            console.log(response.data);*/
             return response.data;
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
+            /*console.log(error);
+            console.log(error.response.status);*/
             return '';
         });
 }

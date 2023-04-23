@@ -9,9 +9,9 @@ const GET_PROFILE = "GET_PROFILE";
 let initialState = {
     token: '',
     error: '',
-    "isTeacher": false,
-    "isStudent": false,
-    "isAdmin": false,
+    isTeacher: false,
+    isStudent: false,
+    isAdmin: false,
     email: '',
     fullName: '',
     birthDate: ''
@@ -53,9 +53,9 @@ const authReducer = (state = initialState, action) => {
 export const getProfile = (token) => (dispatch) => {       //изменить
     return authorizeAPI.profile(token).then(
         (data) => {
-            console.log(data);
+            //console.log(data);
             if(data === '') {
-                console.log("error");
+                //console.log("error");
                 dispatch({
                     type: LOGIN_FAIL,
                 });
@@ -80,14 +80,15 @@ export function loginActionCreator(token) {
 export const login = (email, password) => (dispatch) => {       //изменить
     return authorizeAPI.login(email, password).then(
         (data) => {
-            console.log(data);
+            //console.log(data);
             if(data === '') {
-                console.log("error");
+                //console.log("error");
                 dispatch({
                     type: LOGIN_FAIL,
                 });
                 return Promise.reject();
             }
+            localStorage.setItem("user", email);
             dispatch({
                 type: LOGIN_SUCCESS,
                 data: { token: data, email: email },
@@ -100,9 +101,9 @@ export const login = (email, password) => (dispatch) => {       //изменит
 export const registration1 = (fullName, birthDate, email, password, confirmPassword) => (dispatch) => {
   return authorizeAPI.registration(fullName, birthDate, email, password, confirmPassword).then(
       (data) => {
-          console.log(data);
+          //console.log(data);
           if(data === '') {
-              console.log("error");
+              //console.log("error");
               dispatch({
                   type: LOGIN_FAIL,
               });
@@ -120,14 +121,15 @@ export const registration1 = (fullName, birthDate, email, password, confirmPassw
 export const logout = (token) => (dispatch) => {
     return authorizeAPI.logout(token).then (
         (status) => {
-            console.log(status);
+            //console.log(status);
             if(status !== 200) {
-                console.log("error");
+                //console.log("error");
                 return Promise.reject();
             }
             dispatch({
                 type: LOGOUT,
             });
+            localStorage.setItem("user", '');
             return Promise.resolve();
         }
     );
@@ -137,7 +139,7 @@ export const getUserRole = (token) => (dispatch) => {
     return authorizeAPI.role(token).then (
         (data) => {
             if(data === '') {
-                console.log("failed to get role");
+                //console.log("failed to get role");
                 return Promise.reject();
             }
             dispatch({
@@ -156,7 +158,7 @@ export const getUserRole = (token) => (dispatch) => {
 export function loginThunkCreator(email, password) {
     return (dispatch) => {
         authorizeAPI.login(email, password).then(data => {
-           dispatch(loginActionCreator(data))
+           dispatch(loginActionCreator(data));
         });
     }
 }

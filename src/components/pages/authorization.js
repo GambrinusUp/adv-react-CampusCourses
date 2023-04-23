@@ -1,40 +1,29 @@
 import React from 'react';
-import Navbar from "../UI/navbar";
 import {Card} from "antd";
 import {LockOutlined, MailOutlined} from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
-import {connect, useDispatch, useSelector} from "react-redux";
-import {getUserRole, login, logout} from "../store/authorizeReducer";
+import {useDispatch} from "react-redux";
+import {login} from "../store/authorizeReducer";
 import { useNavigate } from 'react-router-dom';
 
-const Authorization = ({token}) => {
+const Authorization = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const teacher = useSelector(state => state.authorizePage.isTeacher);
-    //const myData = useSelector((state) => state);
     const onFinish = (values) => {
-        //console.log(myData);
-        console.log(token);
         const { email, password } = values;
         dispatch(login(email, password))
             .then(() => {
-                console.log("Logged in successfully");
-                console.log(token);
                 let userToken = localStorage.getItem("token");
                 if (userToken !== '' && userToken !== null){
-                    dispatch(getUserRole(userToken));
-                    console.log(teacher);
                     navigate('/', {replace: true});
                 }
             })
             .catch(() => {
                 console.log("Failed to login");
-                console.log(token);
             });
     };
     return (
         <div style={{backgroundColor: "#EBF5EE", width: "100%", height: "1000px"}}>
-            <Navbar />
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
                 <Card
                     style={{
@@ -106,11 +95,11 @@ const Authorization = ({token}) => {
 };
 
 
-//export default Authorization;
+export default Authorization;
 
 
-function mapStateToProps(state) {
+/*function mapStateToProps(state) {
     return { token: state.authorizePage.token };
 }
 
-export default connect(mapStateToProps, {login, logout})(Authorization);
+export default connect(mapStateToProps, {login, logout})(Authorization);*/
