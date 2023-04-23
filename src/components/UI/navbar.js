@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
-import {connect, useDispatch, useSelector} from "react-redux";
-import {login, logout, registration1} from "../store/authorizeReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {getUserRole, logout} from "../store/authorizeReducer";
 
 const styles = {
     navbar: {
@@ -15,6 +15,7 @@ const styles = {
         position: "fixed"
     },
     navbar_title: {
+        textDecoration: 'none',
         display: "flex",
         //fontFamily: "Inter",
         fontStyle: "normal",
@@ -56,15 +57,21 @@ const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const dispatch = useDispatch();
     const userEmail = useSelector(state => state.authorizePage.email)
+    const token = useSelector(state => state.authorizePage.token)
+    const isTeacher = useSelector(state => state.authorizePage.isTeacher)
+    const isStudent = useSelector(state => state.authorizePage.isStudent)
+    const isAdmin = useSelector(state => state.authorizePage.isAdmin)
     useEffect(() => {
-        console.log(localStorage.getItem("token"));
-        const token = localStorage.getItem("token");
+        //console.log(userEmail);
+        console.log("rendering");
+        let token = localStorage.getItem("token");
         if (token !== null && token !== '') {
             setIsLoggedIn(true);
+            dispatch(getUserRole(token));
         } else {
             setIsLoggedIn(false);
         }
-    }, [dispatch, userEmail]);
+    }, [dispatch, userEmail, token, isTeacher, isStudent, isAdmin]);
     const logoutUser = () => {
         let token = localStorage.getItem("token");
         console.log(token);
@@ -81,11 +88,21 @@ const Navbar = () => {
     };
     return (
         <nav style={styles.navbar}>
-            <div style={styles.navbar_title}>Кампусные курсы
+            <div style={styles.navbar_title}>
+                <Link style={styles.navbar_title} to="/">Кампусные курсы</Link>
                 {isLoggedIn && (
                     <>
                         <Link to="/groups" style={styles.navbar_text_after_title}>Группы курсов</Link>
-                        <Link to="/" style={styles.navbar_text}>Мои курсы</Link>
+                    </>
+                )}
+                {isLoggedIn && isStudent && !isAdmin && (
+                    <>
+                        <Link to="/groups" style={styles.navbar_text_after_title}>Мои курсы</Link>
+                    </>
+                )}
+                {isLoggedIn && isTeacher && !isAdmin && (
+                    <>
+                        <Link to="/groups" style={styles.navbar_text_after_title}>Преподаваемые курсы</Link>
                     </>
                 )}
             </div>
@@ -98,7 +115,7 @@ const Navbar = () => {
                 )}
                 {isLoggedIn && (
                     <>
-                        <Link to="/profile" style={styles.navbar_text}>{userEmail}</Link>
+                        <Link to="/profile" style={styles.navbar_text}>{localStorage.getItem("user")}</Link>
                         <div style={styles.navbar_text} onClick={logoutUser}>Выход</div>
                     </>
                     )}
@@ -107,8 +124,5 @@ const Navbar = () => {
     );
 };
 
-function mapStateToProps(state) {
-    return { token: state.authorizePage.token };
-}
 
-export default connect(mapStateToProps, {login, registration1, logout})(Navbar);
+export default Navbar;

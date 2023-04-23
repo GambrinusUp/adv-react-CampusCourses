@@ -8,15 +8,34 @@ function login(email, password) {
         password: password
     })
         .then((response) => {
-            console.log(response.data.token);
+            //console.log(response.data.token);
             localStorage.setItem("token", response.data.token);
             return response.data.token;
         })
         .catch((error) => {
-            console.log(error.response.status);
+            //console.log(error.response.status);
             localStorage.setItem("token", '');
             return '';
         });
+}
+
+function editProfile(token, fullName, birthDate) {
+    return axios.put(API_URL + "profile", {
+            "fullName": fullName,
+            "birthDate": birthDate + "T18:38:36.191Z"
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then((response) => {
+            return response.status;
+        })
+        .catch((error) => {
+            console.log(error);
+            return error.response.status;
+        })
 }
 
 function registration(fullName, birthDate, email, password, confirmPassword) {
@@ -28,14 +47,14 @@ function registration(fullName, birthDate, email, password, confirmPassword) {
         confirmPassword: confirmPassword
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data.token);
+            /*console.log(response);
+            console.log(response.data.token);*/
             localStorage.setItem("token", response.data.token);
             return response.data.token;
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
+            /*console.log(error);
+            console.log(error.response.status);*/
             localStorage.setItem("token", '');
             return '';
         });
@@ -51,14 +70,14 @@ function logout(token) {
         },
     })
         .then((response) => {
-            console.log(response);
+            /*console.log(response);
             console.log(response.data);
-            localStorage.setItem("token", '');
+            localStorage.setItem("token", '');*/
             return response.status;
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
+            /*console.log(error);
+            console.log(error.response.status);*/
             return error.response.status;
         });
 }
@@ -70,13 +89,13 @@ function role(token) {
         },
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
+            /*console.log(response);
+            console.log(response.data);*/
             return response.data;
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
+            /*console.log(error);
+            console.log(error.response.status);*/
             return '';
         });
 }
@@ -88,13 +107,13 @@ function profile(token) {
         },
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
+            /*console.log(response);
+            console.log(response.data);*/
             return response.data;
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
+            /*console.log(error);
+            console.log(error.response.status);*/
             return '';
         });
 }
@@ -108,5 +127,6 @@ export const authorizeAPI = {
     logout : logout,
     registration : registration,
     role : role,
-    profile : profile
+    profile : profile,
+    editProfile : editProfile
 }

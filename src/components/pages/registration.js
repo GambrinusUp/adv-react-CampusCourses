@@ -1,5 +1,4 @@
 import React from 'react';
-import Navbar from "../UI/navbar";
 import {Card, DatePicker} from "antd";
 import {LockOutlined, MailOutlined, UserOutlined} from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
@@ -23,7 +22,6 @@ const Registration = ({token}) => {
     };
     return (
         <div style={{backgroundColor: "#EBF5EE", width: "100%", height: "1000px"}}>
-            <Navbar />
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
                 <Card
                     style={{

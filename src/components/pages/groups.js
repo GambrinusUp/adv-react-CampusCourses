@@ -1,12 +1,10 @@
 import React from "react";
-import Navbar from "../UI/navbar";
 import GroupsItem from "../UI/GroupsItem";
 class Groups extends React.Component{
     render() {
         return(
           <div>
               <div style={{backgroundColor: "#EBF5EE", width: "100%", height: "1000px"}}>
-                  <Navbar />
                   <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
 
                       <div className='card-deck'>
