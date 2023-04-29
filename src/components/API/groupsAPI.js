@@ -21,6 +21,28 @@ function getGroups(token) {
         });
 }
 
+function addGroups(token, name) {
+    return axios.post(API_URL + "groups", {
+        "name": name
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((response) => {
+            console.log(response);
+            console.log(response.data);
+            if(response.status === 200)
+                return response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log(error.response.status);
+            return '';
+        });
+}
+
 export const groupsAPI = {
-    getGroups : getGroups
+    getGroups : getGroups,
+    addGroups : addGroups
 }

@@ -67,7 +67,10 @@ const Navbar = () => {
         let token = localStorage.getItem("token");
         if (token !== null && token !== '') {
             setIsLoggedIn(true);
-            dispatch(getUserRole(token));
+            dispatch(getUserRole(token)).catch(() => {
+                console.log("Failed to login");
+                localStorage.setItem("token", '');
+            });
         } else {
             setIsLoggedIn(false);
         }
