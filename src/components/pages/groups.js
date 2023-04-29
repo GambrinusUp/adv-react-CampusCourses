@@ -36,7 +36,7 @@ function Groups() {
     }, [dispatch]);
 
     return (
-        <div style={{ backgroundColor: "#EBF5EE", width: "100%", minHeighteight: "1000px" }}>
+        <div style={{ backgroundColor: "#EBF5EE", width: "100%", minHeight: "1000px" }}>
             <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
                 <div className="card-deck">
                     <div
@@ -53,7 +53,7 @@ function Groups() {
                         height: "50px", fontSize: "20px", marginTop:"20px"}}
                             onClick={() => setOpen(true)}>Создать</Button>
                     {groups.map((value) => (
-                        <GroupsItem content={value.name} key={value.id} showButtons={isAdmin}/>
+                        <GroupsItem content={value.name} key={value.id} showButtons={isAdmin} id={value.id}/>
                     ))}
                 </div>
             </div>

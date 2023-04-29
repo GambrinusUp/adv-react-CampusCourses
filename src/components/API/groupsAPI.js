@@ -27,7 +27,7 @@ function addGroups(token, name) {
     }, {
         headers: {
             Authorization: `Bearer ${token}`,
-        },
+        }
     })
         .then((response) => {
             console.log(response);
@@ -42,7 +42,49 @@ function addGroups(token, name) {
         });
 }
 
+function deleteGroups(token, id) {
+    return axios.delete(API_URL + "groups/" + id, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    })
+        .then((response) => {
+            console.log(response);
+            console.log(response.data);
+            if(response.status === 200)
+                return response.status;
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log(error.response.status);
+            return '';
+        });
+}
+
+function editGroups(token, name, id) {
+    return axios.put(API_URL + "groups/" + id, {
+        "name": name
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    })
+        .then((response) => {
+            console.log(response);
+            console.log(response.data);
+            if(response.status === 200)
+                return response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log(error.response.status);
+            return '';
+        })
+}
+
 export const groupsAPI = {
     getGroups : getGroups,
-    addGroups : addGroups
+    addGroups : addGroups,
+    deleteGroups : deleteGroups,
+    editGroups : editGroups
 }

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {getUserRole, logout} from "../store/authorizeReducer";
 
-const styles = {
+const styles = {    //сделать навбар закрепленным сверху
     navbar: {
         height: "60px",
         backgroundColor: "#283044",
@@ -56,6 +56,7 @@ const styles = {
 const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const userEmail = useSelector(state => state.authorizePage.email)
     const token = useSelector(state => state.authorizePage.token)
     const isTeacher = useSelector(state => state.authorizePage.isTeacher)
@@ -70,11 +71,12 @@ const Navbar = () => {
             dispatch(getUserRole(token)).catch(() => {
                 console.log("Failed to login");
                 localStorage.setItem("token", '');
+                navigate('/', {replace: true});
             });
         } else {
             setIsLoggedIn(false);
         }
-    }, [dispatch, userEmail, token, isTeacher, isStudent, isAdmin]);
+    }, [dispatch, userEmail, token, isTeacher, isStudent, isAdmin, navigate]);
     const logoutUser = () => {
         let token = localStorage.getItem("token");
         console.log(token);
