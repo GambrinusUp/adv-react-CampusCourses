@@ -6,7 +6,7 @@ import Authorization from "./components/pages/authorization";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Start from "./components/pages/start";
 import Profile from "./components/pages/profile";
-import Groups from "./components/containers/groupsContainer"
+import Groups from "./components/pages/groups"
 import Navbar from "./components/UI/navbar";
 import React from "react";
 function App() {
