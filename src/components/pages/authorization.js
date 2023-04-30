@@ -1,14 +1,25 @@
-import React from 'react';
-import {Card} from "antd";
+import React, {useEffect} from 'react';
+import {Card, message} from "antd";
 import {LockOutlined, MailOutlined} from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {login} from "../store/authorizeReducer";
 import { useNavigate } from 'react-router-dom';
 
 const Authorization = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [messageApi, contextHolder] = message.useMessage();
+    const errors = useSelector((state) => state.authorizePage.errors);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const warning = (error) => {
+        messageApi.open({
+            type: 'warning',
+            content: error,
+        });
+    };
+
     const onFinish = (values) => {
         const { email, password } = values;
         dispatch(login(email, password))
@@ -22,9 +33,23 @@ const Authorization = () => {
                 console.log("Failed to login");
             });
     };
+
+    useEffect(() => {
+        if (Object.keys(errors).length > 0) {
+            console.log("Errors:", errors);
+            for (const key in errors) {
+                if (errors.hasOwnProperty(key)) {
+                    warning(errors[key]);
+                    console.log(errors[key]);
+                }
+            }
+        }
+    }, [dispatch, errors, warning]);
+
     return (
         <div style={{backgroundColor: "#EBF5EE", width: "100%", height: "1000px"}}>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                {contextHolder}
                 <Card
                     style={{
                         minWidth: 1000,

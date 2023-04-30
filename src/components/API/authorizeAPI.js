@@ -8,14 +8,13 @@ function login(email, password) {
         password: password
     })
         .then((response) => {
-            //console.log(response.data.token);
             localStorage.setItem("token", response.data.token);
-            return response.data.token;
+            return {status: response.status, token: response.data.token};
         })
         .catch((error) => {
-            //console.log(error.response.status);
+            console.log(error);
             localStorage.setItem("token", '');
-            return '';
+            return {status: error.response.status, errors: [error.response.data.message]};
         });
 }
 
@@ -30,11 +29,15 @@ function editProfile(token, fullName, birthDate) {
             },
         })
         .then((response) => {
-            return response.status;
+            return {status: response.status, profile: response.data}
         })
         .catch((error) => {
             console.log(error);
-            return error.response.status;
+            if(error.response.status === 401) {
+                localStorage.setItem("token", '');
+                return {status: error.response.status, errors: [error.response.data.message]}
+            }
+            return {status: error.response.status, errors: error.response.data.errors};
         })
 }
 
@@ -47,37 +50,28 @@ function registration(fullName, birthDate, email, password, confirmPassword) {
         confirmPassword: confirmPassword
     })
         .then((response) => {
-            /*console.log(response);
-            console.log(response.data.token);*/
             localStorage.setItem("token", response.data.token);
-            return response.data.token;
+            return {status: response.status, token: response.data.token};
         })
         .catch((error) => {
-            /*console.log(error);
-            console.log(error.response.status);*/
             localStorage.setItem("token", '');
-            return '';
+            if(error.response.status === 409) {
+                return {status: error.response.status, errors: [error.response.data.message]}
+            }
+            return {status: error.response.status, errors: error.response.data.errors};
         });
 }
 
 function logout(token) {
-    /*localStorage.removeItem("token");
-    console.log('logout');*/
-
     return axios.post(API_URL + "logout", null, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     })
         .then((response) => {
-            /*console.log(response);
-            console.log(response.data);
-            localStorage.setItem("token", '');*/
             return response.status;
         })
         .catch((error) => {
-            /*console.log(error);
-            console.log(error.response.status);*/
             return error.response.status;
         });
 }
@@ -89,14 +83,11 @@ function role(token) {
         },
     })
         .then((response) => {
-            /*console.log(response);
-            console.log(response.data);*/
-            return response.data;
+            return {status: response.status, role: response.data};
         })
         .catch((error) => {
-            /*console.log(error);
-            console.log(error.response.status);*/
-            return '';
+            console.log(error);
+            return {status: error.response.status, errors: [error.response.data.message]}
         });
 }
 
@@ -107,20 +98,12 @@ function profile(token) {
         },
     })
         .then((response) => {
-            /*console.log(response);
-            console.log(response.data);*/
-            return response.data;
+            return {status: response.status, profile: response.data};
         })
         .catch((error) => {
-            /*console.log(error);
-            console.log(error.response.status);*/
-            return '';
+            return {status: error.response.status, errors: [error.response.data.message]};
         });
 }
-
-/*function register() {
-
-}*/
 
 export const authorizeAPI = {
     login : login,

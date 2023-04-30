@@ -57,40 +57,38 @@ const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const userEmail = useSelector(state => state.authorizePage.email)
-    const token = useSelector(state => state.authorizePage.token)
     const isTeacher = useSelector(state => state.authorizePage.isTeacher)
     const isStudent = useSelector(state => state.authorizePage.isStudent)
     const isAdmin = useSelector(state => state.authorizePage.isAdmin)
+
     useEffect(() => {
-        //console.log(userEmail);
         console.log("rendering");
         let token = localStorage.getItem("token");
         if (token !== null && token !== '') {
             setIsLoggedIn(true);
             dispatch(getUserRole(token)).catch(() => {
-                console.log("Failed to login");
                 localStorage.setItem("token", '');
                 navigate('/', {replace: true});
             });
         } else {
             setIsLoggedIn(false);
         }
-    }, [dispatch, userEmail, token, isTeacher, isStudent, isAdmin, navigate]);
+    }, [dispatch, isTeacher, isStudent, isAdmin, navigate]);
+
     const logoutUser = () => {
         let token = localStorage.getItem("token");
-        console.log(token);
         if(token !== null) {
             dispatch(logout(token))
                 .then(() => {
                     setIsLoggedIn(false);
-                    console.log("success");
                 })
                 .catch(() => {
-                    console.log("error");
+                    setIsLoggedIn(false);
                 });
         }
+        navigate('/', {replace: true});
     };
+
     return (
         <nav style={styles.navbar}>
             <div style={styles.navbar_title}>

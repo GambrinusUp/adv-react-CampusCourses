@@ -42,7 +42,7 @@ function GroupsItem(props){
 
     return(
         <>
-            <Card style={{margin: "auto 0", marginTop: "35px", display: "flex",
+            <Card style={{margin: "auto 0", marginBottom: "35px", display: "flex",
                 backgroundColor: "#78A1BB", fontSize: "30px", color: "#FFFFFF"}}
             id={props.id}>
                 <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 600, width: "50vw"}}>

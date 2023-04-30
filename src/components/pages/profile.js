@@ -1,11 +1,11 @@
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Input, Form, DatePicker, Button, Card} from "antd";
+import {Input, Form, DatePicker, Button, Card, message} from "antd";
 import {MailOutlined, UserOutlined} from "@ant-design/icons";
 import {editProfile, getProfile} from "../store/authorizeReducer";
 import {useForm} from "antd/es/form/Form";
 import moment from "moment";
-//import moment from 'moment';
+import {useNavigate} from "react-router-dom";
 
 const Profile = () => {
     const fullName = useSelector(state => state.authorizePage.fullName);
@@ -13,23 +13,45 @@ const Profile = () => {
     const date = useSelector(state => state.authorizePage.birthDate);
     const dispatch = useDispatch();
     const [form] = useForm();
+    const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
+    const errors = useSelector((state) => state.authorizePage.errors);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const warning = (error) => {
+        messageApi.open({
+            type: 'warning',
+            content: error,
+        });
+    };
+    
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token !== null && token !== '') {
             dispatch(getProfile(token))
                 .then(() => {
                     let dateMoment = moment(date, 'YYYY-MM-DD');
-                    console.log("Logged in successfully");
-                    console.log(fullName, email);
                     form.setFieldsValue({fullName: fullName, email: email, birthday: dateMoment});
                 })
                 .catch(() => {
+                    navigate('/', {replace: true});
                     console.log("Failed to login");
                 });
         } else {
+            navigate('/', {replace: true});
             console.log("Failed to login");
         }
-    }, [dispatch, email, form, fullName, date]);
+        if (Object.keys(errors).length > 0) {
+            console.log("Errors:", errors);
+            for (const key in errors) {
+                if (errors.hasOwnProperty(key)) {
+                    warning(errors[key]);
+                    console.log(errors[key]);
+                }
+            }
+        }
+    }, [dispatch, email, form, fullName, date, navigate, errors, warning]);
+    
     const onFinish = (values) => {
         const token = localStorage.getItem("token");
         console.log('Received values of form: ', values);
@@ -41,9 +63,11 @@ const Profile = () => {
                 console.log("Failed to edit");
             });
     };
+    
     return (
         <div style={{backgroundColor: "#EBF5EE", width: "100%", height: "1000px"}}>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", fontSize: "46px" }}>
+                {contextHolder}
                 <Card
                     style={{
                         minWidth: 1000,

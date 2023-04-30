@@ -3,65 +3,104 @@ import {authorizeAPI} from "../API/authorizeAPI";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGIN_FAIL = "LOGIN_FAIL";
 const LOGOUT = "LOGOUT";
-const GET_ROLE = "GET_ROLE";
+const GET_ROLE_SUCCESS = "GET_ROLE_SUCCESS";
+const GET_ROLE_FAILED = "GET_ROLE_FAILED";
 const GET_PROFILE = "GET_PROFILE";
 const EDIT_SUCCESS = "EDIT_SUCCESS";
+const EDIT_FAILED = "EDIT_FAILED";
 
 let initialState = {
     token: '',
-    error: '',
     isTeacher: false,
     isStudent: false,
     isAdmin: false,
     email: '',
     fullName: '',
-    birthDate: ''
+    birthDate: '',
+    errors: []
 };
 
 const authReducer = (state = initialState, action) => {
     let newState = { ...state };
     switch (action.type) {
         case LOGIN_SUCCESS:
-            console.log('success');
-            newState.token = action.data.token;
-            newState.email = action.data.email;
-            newState.error = '';
+            newState.token = action.token;
+            newState.email = action.email;
+            newState.errors = [];
             return newState
         case LOGIN_FAIL:
             newState.token = '';
             newState.email = '';
-            newState.error = 'Invalid data';
+            newState.errors = action.errors;
             return newState
         case LOGOUT:
             newState.token = '';
+            newState.email = '';
             return newState
-        case GET_ROLE:
-            newState.isAdmin = action.data.isAdmin;
-            newState.isTeacher = action.data.isTeacher;
-            newState.isStudent = action.data.isStudent;
+        case GET_ROLE_SUCCESS:
+            newState.isAdmin = action.isAdmin;
+            newState.isTeacher = action.isTeacher;
+            newState.isStudent = action.isStudent;
             return newState
+        case GET_ROLE_FAILED:
+            newState.isAdmin = '';
+            newState.isTeacher = '';
+            newState.isStudent = '';
+            return newState;
         case GET_PROFILE:
-            newState.email = action.data.email;
-            newState.fullName = action.data.fullName;
-            newState.birthDate = action.data.birthDate;
+            newState.email = action.email;
+            newState.fullName = action.fullName;
+            newState.birthDate = action.birthDate;
             return newState
         case EDIT_SUCCESS:
-            newState.fullName = action.data.fullName;
-            newState.birthDate = action.data.birthDate;
+            newState.fullName = action.fullName;
+            newState.birthDate = action.birthDate;
             return newState
+        case EDIT_FAILED:
+            newState.errors = action.errors
+            return newState;
         default:
             return state;
     }
 };
 
+export function editProfileActionCreator(data) {
+    if (data.status === 200)
+        return {type: EDIT_SUCCESS, fullName: data.profile.fullName, birthDate: data.profile.birthDate }
+    else
+        return {type: EDIT_FAILED, errors: data.errors}
+}
+
+export function logoutActionCreator() {
+    return {type: LOGOUT}
+}
+
+export function getUserRoleActionCreator(data) {
+    if (data.status === 200)
+        return {type: GET_ROLE_SUCCESS, isTeacher: data.role.isTeacher, isStudent: data.role.isStudent, isAdmin: data.role.isAdmin}
+    else
+        return {type: GET_ROLE_FAILED}
+}
+
+export function getProfileActionCreator(data) {
+    if (data.status === 200)
+        return {type: GET_PROFILE, email: data.profile.email, birthDate: data.profile.birthDate, fullName: data.profile.fullName}
+    else
+        return {type: LOGIN_FAIL, errors: data.errors}
+}
+
+export function loginActionCreator(data, email) {
+    if (data.status === 200)
+        return {type: LOGIN_SUCCESS, token: data.token, email: email}
+    else
+        return {type: LOGIN_FAIL, errors: data.errors}
+}
+
 export const editProfile = (token, fullName, birthDate) => (dispatch) => {
     return authorizeAPI.editProfile(token, fullName, birthDate).then(
         (data) => {
-            if(data === 200) {
-                dispatch({
-                    type: EDIT_SUCCESS,
-                    data: { fullName: fullName, birthDate: birthDate }
-                });
+            dispatch(editProfileActionCreator(data));
+            if(data.status === 200) {
                 return Promise.resolve();
             }
             return Promise.reject();
@@ -69,50 +108,28 @@ export const editProfile = (token, fullName, birthDate) => (dispatch) => {
     )
 };
 
-export const getProfile = (token) => (dispatch) => {       //изменить
+export const getProfile = (token) => (dispatch) => {
     return authorizeAPI.profile(token).then(
         (data) => {
-            //console.log(data);
-            if(data === '') {
-                //console.log("error");
-                dispatch({
-                    type: LOGIN_FAIL,
-                });
-                return Promise.reject();
+            dispatch(getProfileActionCreator(data));
+            if(data.status === 200) {
+                return Promise.resolve();
             }
-            dispatch({
-                type: GET_PROFILE,
-                data: { email: data.email, birthDate: data.birthDate, fullName: data.fullName },
-            });
-            return Promise.resolve();
+            return Promise.reject();
         }
     );
 };
 
-export function loginActionCreator(token) {
-    if (token !== null)
-        return {type: LOGIN_SUCCESS, token: token}
-    else
-        return {type: LOGIN_FAIL, token: ''}
-}
-
 export const login = (email, password) => (dispatch) => {       //изменить
     return authorizeAPI.login(email, password).then(
         (data) => {
-            //console.log(data);
-            if(data === '') {
-                //console.log("error");
-                dispatch({
-                    type: LOGIN_FAIL,
-                });
-                return Promise.reject();
+            console.log(data);
+            dispatch(loginActionCreator(data, email));
+            if(data.status === 200) {
+                localStorage.setItem("user", email);
+                return Promise.resolve();
             }
-            localStorage.setItem("user", email);
-            dispatch({
-                type: LOGIN_SUCCESS,
-                data: { token: data, email: email },
-            });
-            return Promise.resolve();
+            return Promise.reject();
         }
     );
 };
@@ -120,19 +137,11 @@ export const login = (email, password) => (dispatch) => {       //изменит
 export const registration1 = (fullName, birthDate, email, password, confirmPassword) => (dispatch) => {
   return authorizeAPI.registration(fullName, birthDate, email, password, confirmPassword).then(
       (data) => {
-          //console.log(data);
-          if(data === '') {
-              //console.log("error");
-              dispatch({
-                  type: LOGIN_FAIL,
-              });
-              return Promise.reject();
+          dispatch(loginActionCreator(data, email));
+          if(data.status === 200) {
+              return Promise.resolve();
           }
-          dispatch({
-              type: LOGIN_SUCCESS,
-              data: { token: data },
-          });
-          return Promise.resolve();
+          return Promise.reject();
       }
   );
 };
@@ -140,15 +149,12 @@ export const registration1 = (fullName, birthDate, email, password, confirmPassw
 export const logout = (token) => (dispatch) => {
     return authorizeAPI.logout(token).then (
         (status) => {
-            //console.log(status);
+            localStorage.setItem("token", '');
+            localStorage.setItem("user", '');
             if(status !== 200) {
-                //console.log("error");
                 return Promise.reject();
             }
-            dispatch({
-                type: LOGOUT,
-            });
-            localStorage.setItem("user", '');
+            dispatch(logoutActionCreator());
             return Promise.resolve();
         }
     );
@@ -157,29 +163,12 @@ export const logout = (token) => (dispatch) => {
 export const getUserRole = (token) => (dispatch) => {
     return authorizeAPI.role(token).then (
         (data) => {
-            if(data === '') {
-                //console.log("failed to get role");
-                return Promise.reject();
-            }
-            dispatch({
-                type: GET_ROLE,
-                data: {
-                    isTeacher: data.isTeacher,
-                    isStudent: data.isStudent,
-                    isAdmin: data.isAdmin
-                }
-            });
-            return Promise.resolve();
+            dispatch(getUserRoleActionCreator(data));
+            if(data.status === 200)
+                return Promise.resolve();
+            return Promise.reject();
         }
     );
 };
-
-export function loginThunkCreator(email, password) {
-    return (dispatch) => {
-        authorizeAPI.login(email, password).then(data => {
-           dispatch(loginActionCreator(data));
-        });
-    }
-}
 
 export default authReducer;
