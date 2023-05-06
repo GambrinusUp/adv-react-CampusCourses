@@ -9,15 +9,10 @@ function getGroups(token) {
         },
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
-            if(response.status === 200)
-                return response.data;
+            return {status: response.status, groups: response.data};
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
-            return '';
+            return {status: error.response.status}
         });
 }
 
@@ -30,15 +25,10 @@ function addGroups(token, name) {
         }
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
-            if(response.status === 200)
-                return response.data;
+            return {status: response.status, group: response.data};
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
-            return '';
+            return {status: error.response.status}
         });
 }
 
@@ -49,15 +39,10 @@ function deleteGroups(token, id) {
         }
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
-            if(response.status === 200)
-                return response.status;
+            return {status: response.status};
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
-            return '';
+            return {status: error.response.status}//, errors: [error.response.message]}
         });
 }
 
@@ -70,15 +55,10 @@ function editGroups(token, name, id) {
         }
     })
         .then((response) => {
-            console.log(response);
-            console.log(response.data);
-            if(response.status === 200)
-                return response.data;
+            return {status: response.status, group: response.data}
         })
         .catch((error) => {
-            console.log(error);
-            console.log(error.response.status);
-            return '';
+            return {status: error.response.status}
         })
 }
 

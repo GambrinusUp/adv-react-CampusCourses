@@ -1,4 +1,4 @@
-import {Button, Card, Input, Modal} from "antd";
+import {Button, Card, Input, message, Modal} from "antd";
 import {useDispatch} from "react-redux";
 import {useState} from "react";
 import {deleteGroupThunkCreator, editGroupThunkCreator, loadGroupsThunkCreator} from "../store/groupsReducer";
@@ -7,27 +7,33 @@ function GroupsItem(props){
     const dispatch = useDispatch();
     const [openEdit, setOpenEdit] = useState(false);
     const [groupName, setGroupName] = useState("");
+    const [messageApi, contextHolder] = message.useMessage();
 
     const handleOkEdit = () => {
-        const token = localStorage.getItem("token");
-        console.log(groupName);
-        console.log(props.id);
-        dispatch(editGroupThunkCreator(token, props.id, groupName)).then(() => {
-            console.log("успешно");
-            dispatch(loadGroupsThunkCreator(token));
-        })
-            .catch(() => {
-                console.log("ОШибка");
-            });
-        setGroupName("");
-        setOpenEdit(false);
+        if(groupName !== '') {
+            const token = localStorage.getItem("token");
+            dispatch(editGroupThunkCreator(token, props.id, groupName)).then(() => {
+                dispatch(loadGroupsThunkCreator(token));
+                success("Group edited");
+            })
+                .catch(() => {
+                    console.log("ОШибка");
+                });
+            setGroupName("");
+            setOpenEdit(false);
+        }
+        else {
+            warning("Empty group name");
+        }
     };
 
     const deleteGroup = () => {
         const token = localStorage.getItem("token");
         dispatch(deleteGroupThunkCreator(token, props.id)).then(() => {
-            console.log("успешно");
-            dispatch(loadGroupsThunkCreator(token));
+            success("Group deleted");
+            setTimeout(() => {
+                dispatch(loadGroupsThunkCreator(token));
+            }, 500);
         })
     };
 
@@ -40,8 +46,23 @@ function GroupsItem(props){
         setGroupName(event.target.value);
     };
 
+    const warning = (error) => {
+        messageApi.open({
+            type: 'warning',
+            content: error,
+        });
+    };
+
+    const success = (message) => {
+        messageApi.open({
+            type: 'success',
+            content: message,
+        });
+    };
+
     return(
         <>
+            {contextHolder}
             <Card style={{margin: "auto 0", marginBottom: "35px", display: "flex",
                 backgroundColor: "#78A1BB", fontSize: "30px", color: "#FFFFFF"}}
             id={props.id}>

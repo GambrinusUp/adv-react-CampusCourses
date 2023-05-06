@@ -55,55 +55,52 @@ export function deleteGroupActionCreator(id) {
     return {type: DELETE_GROUP, id: id}
 }
 
-export function loadGroupsThunkCreator(token) {
-    return (dispatch) => {
-        groupsAPI.getGroups(token).then(data => {
-            dispatch(loadGroupsActionCreator(data));
-        })
-    }
-}
+export const loadGroupsThunkCreator = (token) => (dispatch) => {
+    return groupsAPI.getGroups(token).then(
+        (data) => {
+            if(data.status === 200) {
+                dispatch(loadGroupsActionCreator(data.groups));
+                return Promise.resolve();
+            }
+            return Promise.reject();
+        }
+    );
+};
 
 export function addGroupThunkCreator(token, name) {
     return (dispatch) => {
-        return groupsAPI.addGroups(token, name)
-            .then(data => {
-                dispatch(addGroupActionCreator(data));
-                return Promise.resolve();
-            })
-            .catch(error => {
-                console.log('Ошибка при добавлении группы:', error);
+        return groupsAPI.addGroups(token, name).then(
+            (data) => {
+                if(data.status === 200){
+                    dispatch(addGroupActionCreator(data));
+                    return Promise.resolve()
+                }
                 return Promise.reject();
-            });
+            })
     };
 }
 
 export function deleteGroupThunkCreator(token, id) {
     return (dispatch) => {
-        return groupsAPI.deleteGroups(token, id)
-            .then(data => {
-                if(data === 200) {
+        return groupsAPI.deleteGroups(token, id).then(
+            (data) => {
+                if(data.status === 200) {
                     dispatch(deleteGroupActionCreator(id));
                     return Promise.resolve();
                 }
                 return Promise.reject();
             })
-            .catch(error => {
-                console.log(error);
-                return Promise.reject();
-            })
-
     }
 }
 
 export function editGroupThunkCreator(token, id, name) {
     return (dispatch) => {
-        return groupsAPI.editGroups(token, name, id)
-            .then(data => {
-                dispatch(editGroupActionCreator(data));
-                return Promise.resolve();
-            })
-            .catch(error => {
-                console.log(error);
+        return groupsAPI.editGroups(token, name, id).then(
+            (data) => {
+                if(data.status === 200) {
+                    dispatch(editGroupActionCreator(data.group));
+                    return Promise.resolve();
+                }
                 return Promise.reject();
             })
     }

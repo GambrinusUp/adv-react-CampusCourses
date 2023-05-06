@@ -12,7 +12,8 @@ const styles = {    //сделать навбар закрепленным св�
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
-        position: "fixed"
+        position: "fixed",
+        zIndex: 1
     },
     navbar_title: {
         textDecoration: 'none',
