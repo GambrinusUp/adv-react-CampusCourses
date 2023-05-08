@@ -66,5 +66,5 @@ export const groupsAPI = {
     getGroups : getGroups,
     addGroups : addGroups,
     deleteGroups : deleteGroups,
-    editGroups : editGroups
+    editGroups : editGroups,
 }

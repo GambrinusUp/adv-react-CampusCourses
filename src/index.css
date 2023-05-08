@@ -13,5 +13,22 @@ code {
 }
 
 :where(.css-dev-only-do-not-override-mxhywb).ant-modal .ant-modal-content {
-  background-color: #61dafb;
+  background-color: #79a0c1;
+}
+
+:where(.css-dev-only-do-not-override-mxhywb).ant-modal .ant-modal-header {
+  background-color: #79a0c1;
+}
+
+:where(.css-dev-only-do-not-override-mxhywb).ant-modal .ant-modal-title{
+  color: #FFFFFF;
+}
+
+.ant-card-head-title {
+  font-size: 40px;
+  color: #FFFFFF;
+}
+
+:where(.css-dev-only-do-not-override-mxhywb).ant-card .ant-card-body{
+  padding: 5px 20px 10px 20px;
 }

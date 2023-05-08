@@ -9,6 +9,7 @@ import Profile from "./components/pages/profile";
 import Groups from "./components/pages/groups"
 import Navbar from "./components/UI/navbar";
 import React from "react";
+import Courses from "./components/pages/courses";
 function App() {
   return (
       <Router>
@@ -19,6 +20,7 @@ function App() {
               <Route path='/' element={<Start />} />
               <Route path='/profile' element={<Profile />} />
               <Route path='/groups' element={<Groups />} />
+              <Route path="/groups/:id" element={<Courses />} />
           </Routes>
       </Router>
   );
