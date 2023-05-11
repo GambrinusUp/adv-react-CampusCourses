@@ -32,3 +32,49 @@ code {
 :where(.css-dev-only-do-not-override-mxhywb).ant-card .ant-card-body{
   padding: 5px 20px 10px 20px;
 }
+
+/*.ant-tabs-content-holder {
+  border: 1px solid rgba(5, 5, 5, 0.06);
+  padding: 15px;
+}
+
+:where(.css-dev-only-do-not-override-mxhywb).ant-tabs-top >.ant-tabs-nav, :where(.css-dev-only-do-not-override-mxhywb).ant-tabs-bottom >.ant-tabs-nav, :where(.css-dev-only-do-not-override-mxhywb).ant-tabs-top >div>.ant-tabs-nav, :where(.css-dev-only-do-not-override-mxhywb).ant-tabs-bottom >div>.ant-tabs-nav {
+  margin: 0 0 0px 0;
+}
+
+:where(.css-dev-only-do-not-override-mxhywb).ant-tabs-top >.ant-tabs-nav::before, :where(.css-dev-only-do-not-override-mxhywb).ant-tabs-bottom >.ant-tabs-nav::before, :where(.css-dev-only-do-not-override-mxhywb).ant-tabs-top >div>.ant-tabs-nav::before, :where(.css-dev-only-do-not-override-mxhywb).ant-tabs-bottom >div>.ant-tabs-nav::before {
+  border-bottom: 0;
+}
+
+:where(.css-dev-only-do-not-override-mxhywb).ant-tabs .ant-tabs-tab {
+  border: 1px solid rgba(5, 5, 5, 0.06);
+}*/
+
+.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab { /* For tabs border */
+  border-color:  rgba(5, 5, 5, 0.06);
+}
+
+.ant-tabs-top > .ant-tabs-nav::before { /* For the line to the right and close to the tabs */
+  border-color:  rgba(5, 5, 5, 0.06);
+}
+
+.ant-tabs > .ant-tabs-nav { /* So that there is no gap between the content and tabs */
+  margin-bottom: 0;
+}
+
+.ant-tabs-content-holder {
+  padding: 15px;
+  border: 1px solid rgba(5, 5, 5, 0.06); /* Border for the content part */
+  border-top: transparent; /* Remove the top border so that there is no overlap*/
+}
+
+:where(.css-dev-only-do-not-override-mxhywb).ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #78A1BB;
+  text-shadow: 0 0 0.25px currentcolor;
+}
+
+:where(.css-dev-only-do-not-override-mxhywb).ant-tabs .ant-tabs-ink-bar {
+  position: absolute;
+  background: #78A1BB;
+  pointer-events: none;
+}

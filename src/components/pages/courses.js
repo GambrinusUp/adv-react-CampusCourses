@@ -27,7 +27,7 @@ function Courses() {
         label: fullName,
     }));
 
-    const yearRegex = /^\d{4}$/;
+    const yearRegex = /^20(0\d|1\d|2[0-9])$/;
     const seatRegex = /^[1-9]\d*$/;
 
     const onChange = (e) => {
@@ -45,6 +45,7 @@ function Courses() {
                 requirements, annotations, valueTeacher)).then(() => {
                 dispatch(loadCoursesThunkCreator(token, id)).then(() => {
                     success("Course created");
+                    dispatch(loadCoursesThunkCreator(token, id));
                 });
             });
             setOpen(false);

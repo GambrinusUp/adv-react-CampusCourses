@@ -1,11 +1,12 @@
 import {Card} from "antd";
+import {Link} from "react-router-dom";
 
 function CoursesItem(props) {
     const statusColors = {
         'Created': '#FFFFFF',
         'OpenForAssigning': '#008958',
         'Started': '#826D9C',
-        'Finished': '#D68684'
+        'Finished': '#DF8280'
     };
 
     return(
@@ -14,7 +15,9 @@ function CoursesItem(props) {
                 backgroundColor: "#78A1BB", fontSize: "30px", color: "#FFFFFF"}}
                   id={props.id}>
                 <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 600, width: "50vw"}}>
-                    <div style={{fontWeight: "600",fontSize:"40px"}}>{props.title}</div>
+                    <div style={{fontWeight: "600",fontSize:"40px"}}><Link to={`/courses/${props.id}`} style={{ color: '#fff' }}>
+                        {props.title}
+                    </Link></div>
                     <div style={{fontWeight: "600", fontSize:"26px", color:statusColors[props.status]}}>{props.status}</div>
                 </div>
                 <div style={{alignItems: "center", fontSize:"22px", minWidth: 600, width: "50vw"}}>
