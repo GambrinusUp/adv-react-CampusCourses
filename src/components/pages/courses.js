@@ -4,12 +4,15 @@ import CoursesItem from "../UI/CoursesItem";
 import {Button, Input, message, Modal, Radio, Select} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {createCourseOfGroupThunkCreator, loadCoursesThunkCreator, loadUsersThunkCreator} from "../store/coursesReducer";
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
 
 function Courses() {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isAdmin = useSelector((state) => state.authorizePage.isAdmin);
+    const isStudent = useSelector((state) => state.authorizePage.isStudent);
     const courses = useSelector((state) => state.coursesPage.courses);
     const users = useSelector((state) => state.coursesPage.users)
     const [messageAPI, contextHolder] = message.useMessage();
@@ -21,6 +24,23 @@ function Courses() {
     const [value, setValue] = useState('Autumn');
     const [valueTeacher, setTeacher] = useState('');
     const [open, setOpen] = useState(false);
+
+    const modules = {
+        toolbar: [
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'font': [] }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'size': ['small', false, 'large', 'huge'] }],
+            ['link', 'image', 'video', 'formula'],
+            ['clean']
+        ]
+    };
 
     const options = users.map(({ id, fullName }) => ({
         value: id,
@@ -84,7 +104,10 @@ function Courses() {
         const token = localStorage.getItem("token");
         dispatch(loadCoursesThunkCreator(token, id)).then(() => {
             console.log(courses);
-            dispatch(loadUsersThunkCreator(token));
+            if(isAdmin) {
+                console.log(isStudent);
+                dispatch(loadUsersThunkCreator(token));
+            }
         })
         // eslint-disable-next-line
     }, [dispatch, id, navigate]);
@@ -153,18 +176,20 @@ function Courses() {
                     </Radio.Group>
                 </div>
                 Требования
-                <Input
+                <ReactQuill
                     value={requirements}
+                    onChange={setRequirements}
+                    modules={modules}
                     placeholder="Введите требования"
-                    onChange={(event) => setRequirements(event.target.value)}
-                    style={{marginBottom: "10px"}}
+                    style={{marginBottom: "10px", color:"black"}}
                 />
                 Аннотации
-                <Input
+                <ReactQuill
                     value={annotations}
+                    onChange={setAnnotations}
+                    modules={modules}
                     placeholder="Введите аннотации"
-                    onChange={(event) => setAnnotations(event.target.value)}
-                    style={{marginBottom: "10px"}}
+                    style={{marginBottom: "10px", color:"black"}}
                 />
                 Основной преподаватель курса
                 <div>

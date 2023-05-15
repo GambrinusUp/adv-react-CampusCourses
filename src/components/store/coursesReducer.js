@@ -79,10 +79,132 @@ export function editCourseDetailsActionCreator(data) {
         return {type: EDIT_DETAILS_FAILED, errors: data.errors}
 }
 
+export function createNotificationsActionCreator(data) {
+    if(data.status === 200)
+        return {type: EDIT_COURSE}
+    else
+        return {type: EDIT_DETAILS_FAILED, errors: data.errors}
+}
+
+export function addTeacherToCourseActionCreator(data) {
+    if(data.status === 200)
+        return {type: EDIT_COURSE}
+    else
+        return {type: EDIT_DETAILS_FAILED, errors: data.errors}
+}
+
+export function getMyCoursesActionCreator(courses) {
+    return {type: LOAD_COURSES, courses : courses}
+}
+
+export function getTeachingCoursesActionCreator(courses) {
+    return {type: LOAD_COURSES, courses : courses}
+}
+
+export function signUpFailedActionCreator(errors) {
+    return {type: EDIT_DETAILS_FAILED, errors : errors}
+}
+
+export function editStatusStudentActionCreator(errors) {
+    return {type: EDIT_DETAILS_FAILED, errors : errors}
+}
+
+export function editMarkStudentActionCreator(errors) {
+    return {type: EDIT_DETAILS_FAILED, errors : errors}
+}
+
+export const editMarkStudentThunkCreator = (token, idCourse, idStudent, markType, mark) => (dispatch) => {
+    return coursesAPI.editMarksStudent(token, idCourse, idStudent, markType, mark).then(
+        (data) => {
+            console.log(data);
+            if(data.status === 200) {
+                return Promise.resolve();
+            }
+            dispatch(editMarkStudentActionCreator(data.errors));
+            return Promise.reject();
+        }
+    );
+};
+
+export const editStatusStudentThunkCreator = (token, idCourse, idStudent, status) => (dispatch) => {
+    return coursesAPI.editStatusStudent(token, idCourse, idStudent, status).then(
+        (data) => {
+            console.log(data);
+            if(data.status === 200) {
+                return Promise.resolve();
+            }
+            dispatch(editStatusStudentActionCreator(data.errors));
+            return Promise.reject();
+        }
+    );
+};
+
+export const signUpToCourseThunkCreator = (token, id) => (dispatch) => {
+    return coursesAPI.signUpToCourse(token, id).then(
+        (data) => {
+            console.log(data);
+            if(data.status === 200) {
+                return Promise.resolve();
+            }
+            signUpFailedActionCreator(data.errors);
+            return Promise.reject();
+        }
+    );
+};
+
+export const getTeachingCoursesThunkCreator = (token) => (dispatch) => {
+    return coursesAPI.getTeachingCourses(token).then(
+        (data) => {
+            console.log(data);
+            if(data.status === 200) {
+                dispatch(getTeachingCoursesActionCreator(data.courses));
+                return Promise.resolve();
+            }
+            return Promise.reject();
+        }
+    );
+};
+
+export const getMyCoursesThunkCreator = (token) => (dispatch) => {
+    return coursesAPI.getMyCourses(token).then(
+        (data) => {
+            console.log(data);
+            if(data.status === 200) {
+                dispatch(getMyCoursesActionCreator(data.courses));
+                return Promise.resolve();
+            }
+            return Promise.reject();
+        }
+    );
+};
+
+export const addTeacherToCourseThunkCreator = (token, id, teacherId) => (dispatch) => {
+    return coursesAPI.addTeacherToCourse(token, id, teacherId).then(
+        (data) => {
+            dispatch(addTeacherToCourseActionCreator(data));
+            if(data.status === 200) {
+                return Promise.resolve();
+            }
+            return Promise.reject();
+        }
+    );
+};
+
+export const createNotificationsThunkCreator = (token, id, isImportant, text) => (dispatch) => {
+    return coursesAPI.createNotifications(token, id, isImportant, text).then(
+        (data) => {
+            dispatch(createNotificationsActionCreator(data));
+            if(data.status === 200) {
+                return Promise.resolve();
+            }
+            return Promise.reject();
+        }
+    );
+};
+
 export const editCourseDetailsThunkCreator = (token, id, requirements, annotations) => (dispatch) => {
     return coursesAPI.editCourseDetails(token, id, requirements, annotations).then(
         (data) => {
-            console.log(data);
             dispatch(editCourseDetailsActionCreator(data));
             if(data.status === 200) {
                 return Promise.resolve();

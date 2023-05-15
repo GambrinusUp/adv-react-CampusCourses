@@ -1,10 +1,16 @@
 import {Button, List, message, Modal, Radio} from "antd";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {editCourseStatusThunkCreator, loadDetailsThunkCreator} from "../store/coursesReducer";
+import {
+    editCourseStatusThunkCreator,
+    loadDetailsThunkCreator,
+    signUpToCourseThunkCreator
+} from "../store/coursesReducer";
 
 function CourseDetailsItem(props) {
     const dispatch = useDispatch();
+    const isAdmin = useSelector((state) => state.authorizePage.isAdmin);
+    const isTeacher = useSelector((state) => state.authorizePage.isTeacher);
     const error = useSelector((state) => state.coursesPage.error);
     const [value, setValue] = useState(props.status);
     const [open, setOpen] = useState(false);
@@ -17,6 +23,16 @@ function CourseDetailsItem(props) {
         'Started': '#826D9C',
         'Finished': '#DF8280'
     };
+
+    const signUpToCourse = () => {
+        const token = localStorage.getItem("token");
+        dispatch(signUpToCourseThunkCreator(token, props.id)).then(() => {
+            success("Signed up to course");
+            dispatch(loadDetailsThunkCreator(token, props.id));
+        }).catch(() => {
+            warning("Error")
+        });
+    }
 
     const onChange = (e) => {
         console.log('radio checked', e.target.value);
@@ -74,8 +90,12 @@ function CourseDetailsItem(props) {
                             {props.status}
                         </div>
                     </div>
-                    <Button type="primary" style={{marginRight: "10px", backgroundColor:"#EEE8A9", color: "#283044"}}
-                            onClick={() => setOpen(true)}>Изменить</Button>
+                    {(isAdmin || isTeacher) && (<Button type="primary" style={{marginRight: "10px", backgroundColor:"#EEE8A9", color: "#283044"}}
+                            onClick={() => setOpen(true)}>Изменить</Button>)}
+                    {!isAdmin && !isTeacher && (props.status === 'OpenForAssigning')
+                        && (!props.showButton.some(student => student.email === localStorage.getItem("user")))
+                        && (<Button type="primary" style={{marginRight: "10px", backgroundColor:"#0FB17D", color: "#FFFFFF"}}
+                                                        onClick={signUpToCourse}>Записаться на курс</Button>)}
                 </List.Item>
                 <List.Item>
                     <div style={{ width: "50%" }}>
@@ -122,7 +142,7 @@ function CourseDetailsItem(props) {
                     </div>
                 </List.Item>
             </List>
-            <Modal
+            {(isAdmin || isTeacher) && (<Modal
                 title="Изменение статуса курса"
                 centered
                 open={open}
@@ -136,7 +156,7 @@ function CourseDetailsItem(props) {
                     <Radio style={{color: "#FFFFFF"}} value={'Started'}>В процессе</Radio>
                     <Radio style={{color: "#FFFFFF"}} value={'Finished'}>Завершен</Radio>
                 </Radio.Group>
-            </Modal>
+            </Modal>)}
         </>
     )
 }

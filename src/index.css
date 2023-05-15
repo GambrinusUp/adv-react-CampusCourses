@@ -78,3 +78,32 @@ code {
   background: #78A1BB;
   pointer-events: none;
 }
+
+.quill .ql-editor {
+  background-color: #FFFFFF;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.ant-tabs-content-holder .ql-container.ql-snow {
+  border: 0;
+}
+
+.ant-tabs-content-holder .quill .ql-editor {
+  background-color: transparent;
+  max-height: 300px;
+  overflow: auto;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #A9A9A9;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #eee;
+}

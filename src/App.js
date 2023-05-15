@@ -11,6 +11,8 @@ import Navbar from "./components/UI/navbar";
 import React from "react";
 import Courses from "./components/pages/courses";
 import Course from "./components/pages/course";
+import MyCourses from "./components/pages/myCourses"
+import TeachingCourses from "./components/pages/teachingCourses";
 function App() {
   return (
       <Router>
@@ -23,6 +25,8 @@ function App() {
               <Route path='/groups' element={<Groups />} />
               <Route path="/groups/:id" element={<Courses />} />
               <Route path="/courses/:id" element={<Course />} />
+              <Route path="/courses/my" element={<MyCourses />} />
+              <Route path="/courses/teaching" element={<TeachingCourses />} />
           </Routes>
       </Router>
   );
