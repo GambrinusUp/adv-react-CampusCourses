@@ -152,10 +152,9 @@ const Registration = () => {
                             <Form.Item
                                 style={{paddingTop: "20px", minWidth: 800, width: "100%"}}>
                                 <Button type="primary" htmlType="submit" className="login-form-button" style={{backgroundColor: "#BFA89E",
-                                    width: "160px",
                                     height: "50px",
                                     fontSize: "20px"}}>
-                                    Register
+                                    Зарегистрироваться
                                 </Button>
                             </Form.Item>
                         </Form>

@@ -1,4 +1,4 @@
-import {Badge, Button, Input, List, message, Modal, Radio, Select, Tabs} from "antd";
+import {Badge, Button, Input, List, message, Modal, Popconfirm, Radio, Select, Tabs} from "antd";
 import {PlusOutlined} from "@ant-design/icons";
 import CourseDetailsItem from "../UI/CourseDetailsItem";
 import {useNavigate, useParams} from "react-router-dom";
@@ -172,8 +172,8 @@ function Course() {
     useEffect(() => {
         const token = localStorage.getItem("token");
         dispatch(loadDetailsThunkCreator(token, id)).then(() => {
-            if(isTeacher && isAdmin)
-                dispatch(loadUsersThunkCreator(token));
+            if(isTeacher || isAdmin)
+                dispatch(loadUsersThunkCreator(token)).then(() => {console.log(1)});
         }).catch(() => {
             navigate('/', {replace: true});
         });
@@ -205,9 +205,17 @@ function Course() {
                     </div>
                     <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
                         Основные данные курса
-                        {(isAdmin || isTeacher) && (<div>
-                            <Button type="primary" style={{marginRight: "10px", backgroundColor:"#DF8280", color: "#283044"}}
-                            onClick={deleteCourse}>Удалить курс</Button>
+                        {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) && (<div>
+                            {isAdmin && (
+                                <Popconfirm
+                                    title="Вы хотите удалить курс?"
+                                    onConfirm={deleteCourse}
+                                    okText="Да"
+                                    cancelText="Нет"
+                                >
+                                    <Button type="primary" style={{marginRight: "10px", backgroundColor:"#DF8280", color: "#283044"}}>Удалить курс</Button>
+                                </Popconfirm>
+                            )}
                             <Button type="primary" style={{marginRight: "10px", backgroundColor:"#EEE8A9", color: "#283044"}}
                             onClick={() => {setEditVisible(true); setRequirements(details.requirements);
                                 setAnnotations(details.annotations)}}>Редактировать</Button>
@@ -216,7 +224,9 @@ function Course() {
                     <CourseDetailsItem id={id} status={details.status} startYear={details.startYear} semester={details.semester}
                     allPlaces={details.maximumStudentsCount} studentsEnrolledCount={details.studentsEnrolledCount}
                                        showButton={details.students}
-                                       studentsInQueueCount={details.studentsInQueueCount}/>
+                                       studentsInQueueCount={details.studentsInQueueCount}
+                                       teachers={details.teachers}
+                    />
                     <Tabs defaultActiveKey="1" centered style={{marginTop:20}}>
                         <TabPane tab="Требования к курсу" key="1">
                             <ReactQuill
@@ -244,7 +254,7 @@ function Course() {
                                 <Badge count={Object(details.notifications).length} style={{ marginLeft: 8 }} />
                             </span>
                         } key="3">
-                            {(isAdmin || isTeacher) && (<Button onClick={() => {setNotificationVisible(true)}} icon={<PlusOutlined/>} type="primary">
+                            {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) && (<Button onClick={() => {setNotificationVisible(true)}} icon={<PlusOutlined/>} type="primary">
                                 Создать уведомление
                             </Button>)}
                             <List
@@ -261,7 +271,7 @@ function Course() {
                     </Tabs>
                     <Tabs defaultActiveKey="1" centered style={{marginTop:20, paddingBottom:10}}>
                         <TabPane tab="Преподаватели" key="1">
-                            {(isAdmin || isTeacher) && (<Button icon={<PlusOutlined />} type="primary" onClick={() => {
+                            {isAdmin && (<Button icon={<PlusOutlined />} type="primary" onClick={() => {
                                 setTeacherVisible(true);
                             }}>
                                 Добавить преподавателя
@@ -303,12 +313,12 @@ function Course() {
                                                 {item.email}
                                             </div>
                                         </div>
-                                        {(isAdmin || isTeacher || item.email === localStorage.getItem("user")) && (
+                                        {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user"))) || item.email === localStorage.getItem("user")) && (
                                             <>
                                                 <div style={{ width: "33%" }}>
                                                     {item.status === 'Accepted' && (
                                                         <>
-                                                            {(isAdmin || isTeacher) ? (
+                                                            {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) ? (
                                                                 <a href="#" onClick={(event) => { event.preventDefault();
                                                                 setMarkType('Midterm'); setStudentVisible(true);
                                                                 setStudent(item.name); setStudentId(item.id);}}>
@@ -329,7 +339,7 @@ function Course() {
                                                 <div style={{ width: "33%" }}>
                                                     {item.status === 'Accepted' && (
                                                         <>
-                                                            {(isAdmin || isTeacher) ? (
+                                                            {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) ? (
                                                                 <a href="#" onClick={(event) => { event.preventDefault();
                                                                     setMarkType('Final'); setStudentVisible(true);
                                                                     setStudent(item.name);setStudentId(item.id);}}>
@@ -351,7 +361,7 @@ function Course() {
                                                             </Button>
                                                         </>
                                                     )}
-                                                    {(isAdmin || isTeacher) && item.status === 'InQueue' && (
+                                                    {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) && item.status === 'InQueue' && (
                                                         <>
                                                             <Button type="primary" style={{marginRight:"10px"}}
                                                             onClick={() => {changeStatusStudent(item.id, "Accepted")}}>принять</Button>

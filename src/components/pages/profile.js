@@ -24,6 +24,13 @@ const Profile = () => {
             content: error,
         });
     };
+
+    const success = (message) => {
+        messageApi.open({
+            type: 'success',
+            content: message,
+        });
+    };
     
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -57,6 +64,7 @@ const Profile = () => {
         console.log('Received values of form: ', values);
         dispatch(editProfile(token, values.fullName, values.birthday.format('YYYY-MM-DD')))
             .then(() => {
+                success("Edit success")
                 console.log("Edit success");
                 })
             .catch(() => {
@@ -119,7 +127,7 @@ const Profile = () => {
                             width: "160px",
                             height: "50px",
                             fontSize: "20px"}}>
-                            Change
+                            Изменить
                         </Button>
                     </Form.Item>
                 </Form>

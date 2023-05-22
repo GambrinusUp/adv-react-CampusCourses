@@ -71,12 +71,13 @@ function Groups() {
                             fontStyle: "normal",
                             fontSize: "60px",
                             color: "#283044",
+                            paddingBottom: 20
                         }}
                     >
                         Группы кампусных курсов
                     </div>
                     {isAdmin && (<Button style={{backgroundColor: "#7A80AC",  width: "160px",
-                        height: "50px", fontSize: "20px", marginTop:"20px", marginBottom:"20px"}}
+                        height: "50px", fontSize: "20px", marginBottom:"20px"}}
                             onClick={() => setOpen(true)}>Создать</Button>)}
                     {groups.map((value) => (
                         <GroupsItem content={value.name} key={value.id} showButtons={isAdmin} id={value.id}/>

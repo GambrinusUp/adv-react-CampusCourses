@@ -23,6 +23,7 @@ function getListOfUsers(token) {
         }
     })
         .then((response) => {
+            console.log(response);
             return {status: response.status, users: response.data}
         })
         .catch((error) => {

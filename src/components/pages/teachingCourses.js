@@ -26,7 +26,7 @@ function TeachingCourses() {
                             paddingBottom: 20
                         }}
                     >
-                        Группы кампусных курсов
+                        Преподаваемые курсы
                     </div>
                     {courses.map((value) => (
                         <CoursesItem title={value.name} key={value.id} id={value.id} date={value.startYear} semester={value.semester}

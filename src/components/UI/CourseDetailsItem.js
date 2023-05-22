@@ -17,6 +17,8 @@ function CourseDetailsItem(props) {
     const [messageApi, contextHolder] = message.useMessage();
     const [errorShown, setErrorShown] = useState(false);
 
+    const errors = useSelector((state) => state.coursesPage.errors)
+
     const statusColors = {
         'Created': '#000000',
         'OpenForAssigning': '#008958',
@@ -28,8 +30,9 @@ function CourseDetailsItem(props) {
         const token = localStorage.getItem("token");
         dispatch(signUpToCourseThunkCreator(token, props.id)).then(() => {
             success("Signed up to course");
-            dispatch(loadDetailsThunkCreator(token, props.id));
+
         }).catch(() => {
+            console.log(errors);
             warning("Error")
         });
     }
@@ -51,6 +54,9 @@ function CourseDetailsItem(props) {
                     setErrorShown(false);
                 });
             setOpen(false);
+        }
+        else {
+            warning("Choose status of course")
         }
     };
 
@@ -77,7 +83,7 @@ function CourseDetailsItem(props) {
             setErrorShown(true);
             warning(error);
         }
-    }, [dispatch, error, warning, errorShown]);
+    }, [dispatch, error, warning, errorShown, errors]);
 
     return(
         <>
@@ -90,12 +96,15 @@ function CourseDetailsItem(props) {
                             {props.status}
                         </div>
                     </div>
-                    {(isAdmin || isTeacher) && (<Button type="primary" style={{marginRight: "10px", backgroundColor:"#EEE8A9", color: "#283044"}}
-                            onClick={() => setOpen(true)}>Изменить</Button>)}
-                    {!isAdmin && !isTeacher && (props.status === 'OpenForAssigning')
-                        && (!props.showButton.some(student => student.email === localStorage.getItem("user")))
-                        && (<Button type="primary" style={{marginRight: "10px", backgroundColor:"#0FB17D", color: "#FFFFFF"}}
-                                                        onClick={signUpToCourse}>Записаться на курс</Button>)}
+                    <div>
+                        {(isAdmin || (isTeacher && props.teachers && props.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) && (<Button type="primary" style={{marginRight: "10px", backgroundColor:"#EEE8A9", color: "#283044"}}
+                                                                                                                                                                  onClick={() => setOpen(true)}>Изменить</Button>)}
+                        { (props.status === 'OpenForAssigning')
+                            && (props.showButton && !props.showButton.some(student => student.email === localStorage.getItem("user")))
+                            && (props.teachers && !props.teachers.some(teacher => teacher.email === localStorage.getItem("user")))
+                            && (<Button type="primary" style={{marginRight: "10px", backgroundColor:"#0FB17D", color: "#FFFFFF"}}
+                                        onClick={signUpToCourse}>Записаться на курс</Button>)}
+                    </div>
                 </List.Item>
                 <List.Item>
                     <div style={{ width: "50%" }}>

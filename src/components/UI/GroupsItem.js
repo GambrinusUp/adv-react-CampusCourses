@@ -1,4 +1,4 @@
-import {Button, Card, Input, message, Modal} from "antd";
+import {Button, Card, Input, message, Modal, Popconfirm} from "antd";
 import {useDispatch} from "react-redux";
 import {useState} from "react";
 import {deleteGroupThunkCreator, editGroupThunkCreator, loadGroupsThunkCreator} from "../store/groupsReducer";
@@ -75,8 +75,14 @@ function GroupsItem(props){
                         <div style={{display: "flex", alignItems: "center"}}>
                             <Button type="primary" style={{marginRight: "10px", backgroundColor:"#EEE8A9", color: "#283044"}}
                                     onClick={() => {setOpenEdit(true); setGroupName(props.content)}}>Редактировать</Button>
-                            <Button type="primary" style={{backgroundColor: "#DF8280", color: "#283044"}}
-                                    onClick={deleteGroup}>Удалить</Button>
+                            <Popconfirm
+                                title="Вы хотите удалить группу?"
+                                onConfirm={deleteGroup}
+                                okText="Да"
+                                cancelText="Нет"
+                            >
+                                <Button type="primary" style={{backgroundColor: "#DF8280", color: "#283044"}}>Удалить</Button>
+                            </Popconfirm>
                         </div>
                     )}
                 </div>

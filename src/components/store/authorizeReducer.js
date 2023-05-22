@@ -139,6 +139,7 @@ export const registration1 = (fullName, birthDate, email, password, confirmPassw
       (data) => {
           dispatch(loginActionCreator(data, email));
           if(data.status === 200) {
+              localStorage.setItem("user", email);
               return Promise.resolve();
           }
           return Promise.reject();

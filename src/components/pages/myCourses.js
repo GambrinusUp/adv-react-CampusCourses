@@ -26,7 +26,14 @@ function MyCourses() {
                             paddingBottom: 20
                         }}
                     >
-                        Группы кампусных курсов
+                        {courses.length < 1 ? (
+                            <>
+                                Вы пока ещё не записались на курсы
+                            </>
+                            ) :
+                            (<>
+                                Мои курсы
+                            </>)}
                     </div>
                     {courses.map((value) => (
                         <CoursesItem title={value.name} key={value.id} id={value.id} date={value.startYear} semester={value.semester}
