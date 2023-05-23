@@ -5,6 +5,7 @@ import { Button, Form, Input } from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../store/authorizeReducer";
 import { useNavigate } from 'react-router-dom';
+import styles from './style.module.css'
 
 const Authorization = () => {
     const navigate = useNavigate();
@@ -47,32 +48,16 @@ const Authorization = () => {
     }, [dispatch, errors, warning]);
 
     return (
-        <div style={{backgroundColor: "#EBF5EE", width: "100%", height: "1000px"}}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+        <div className={styles.container}>
+            <div className={styles.cardDeck}>
                 {contextHolder}
-                <Card
-                    style={{
-                        minWidth: 1000,
-                        width: "70%",
-                        height: 800,
-                        backgroundColor: "#78A1BB",
-                        borderRadius: "20px"
-                    }}
-                >
-                    <div style={{
-                        paddingTop: 50,
-                        fontStyle: "normal",
-                        fontSize: "60px",
-                        display: "flex",
-                        justifyContent: "center",
-                        color: "#FFFFFF"
-                    }}>Авторизация</div>
-                    <div style={{ display:"flex", textAlign: "center", justifyContent: "center"}}>
+                <Card className={styles.authCard}>
+                    <div className={styles.title}>Авторизация</div>
+                    <div className={styles.authFormContainer}>
                         <Form
                             name="normal_login"
                             className="login-form"
-                            onFinish={onFinish}
-                        >
+                            onFinish={onFinish}>
                             <Form.Item
                                 name="email"
                                 rules={[
@@ -81,9 +66,10 @@ const Authorization = () => {
                                         message: 'Please input your Email!',
                                     },
                                 ]}
-                                style={{paddingTop: "40px", minWidth: 800, width: "100%"}}
-                            >
-                                <Input prefix={<MailOutlined style={{ fontSize: '20px'}} />} placeholder="Email" style={{ height: "50px" }}/>
+                                className={styles.authFormItem}>
+                                <Input prefix={<MailOutlined style={{ fontSize: '20px'}} />}
+                                       placeholder="Email"
+                                       style={{ height: "50px" }}/>
                             </Form.Item>
                             <Form.Item
                                 name="password"
@@ -93,22 +79,25 @@ const Authorization = () => {
                                         message: 'Please input your Password!',
                                     },
                                 ]}
-                                style={{paddingTop: "40px", minWidth: 800, width: "100%"}}
-                            >
+                                className={styles.authFormItem}>
                                 <Input
-                                    prefix={<LockOutlined className="site-form-item-icon" style={{ fontSize: '20px'}} />}
+                                    prefix={<LockOutlined className="site-form-item-icon"
+                                                          style={{ fontSize: '20px'}} />}
                                     type="password"
                                     placeholder="Password"
-                                    style={{ height: "50px" }}
-                                />
+                                    style={{ height: "50px" }}/>
                             </Form.Item>
                             <Form.Item
-                                style={{paddingTop: "40px"}}>
-                                <Button type="primary" htmlType="submit" className="login-form-button" style={{backgroundColor: "#BFA89E",
+                                className={styles.authFormItem}>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    className="login-form-button"
+                                    style={{backgroundColor: "#BFA89E",
                                     width: "160px",
                                     height: "50px",
                                     fontSize: "20px"}}>
-                                    Log in
+                                Войти
                                 </Button>
                             </Form.Item>
                         </Form>
@@ -121,10 +110,3 @@ const Authorization = () => {
 
 
 export default Authorization;
-
-
-/*function mapStateToProps(state) {
-    return { token: state.authorizePage.token };
-}
-
-export default connect(mapStateToProps, {login, logout})(Authorization);*/

@@ -6,6 +6,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {createCourseOfGroupThunkCreator, loadCoursesThunkCreator, loadUsersThunkCreator} from "../store/coursesReducer";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
+import {loadGroupsThunkCreator} from "../store/groupsReducer";
+import styles from './style.module.css'
 
 function Courses() {
     const { id } = useParams();
@@ -14,7 +16,8 @@ function Courses() {
     const isAdmin = useSelector((state) => state.authorizePage.isAdmin);
     const isStudent = useSelector((state) => state.authorizePage.isStudent);
     const courses = useSelector((state) => state.coursesPage.courses);
-    const users = useSelector((state) => state.coursesPage.users)
+    const users = useSelector((state) => state.coursesPage.users);
+    const groups = useSelector((state) => state.groupsPage.groups);
     const [messageAPI, contextHolder] = message.useMessage();
     const [courseName, setCourseName] = useState("");
     const [startYear, setStartYear] = useState("");
@@ -102,6 +105,10 @@ function Courses() {
         //loadCourses(id);
         console.log(id);
         const token = localStorage.getItem("token");
+        console.log(token);
+        if(token === '' || token === null)
+            navigate('/', {replace: true});
+        dispatch(loadGroupsThunkCreator(token));
         dispatch(loadCoursesThunkCreator(token, id)).then(() => {
             console.log(courses);
             if(isAdmin) {
@@ -113,27 +120,25 @@ function Courses() {
     }, [dispatch, id, navigate]);
 
     return(
-        <div style={{ backgroundColor: "#EBF5EE", width: "100%", minHeight: "1000px"}}>
-            <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
+        <div className={styles.container2}>
+            <div className={styles.cardDeck}>
                 {contextHolder}
                 <div className="card-deck">
-                    <div
-                        style={{
-                            paddingTop: 90,
-                            fontStyle: "normal",
-                            fontSize: "60px",
-                            color: "#283044",
-                            paddingBottom: 20
-                        }}
-                    >
-                        Группы кампусных курсов
+                    <div className={styles.title2}>
+                        Группа - {groups && groups.find(group => group.id === id)?.name}
                     </div>
                     {isAdmin && (<Button style={{backgroundColor: "#7A80AC",  width: "160px",
                         height: "50px", fontSize: "20px", marginBottom:"20px"}}
                                          onClick={() => setOpen(true)}>Создать</Button>)}
                     {courses.map((value) => (
-                        <CoursesItem title={value.name} key={value.id} id={value.id} date={value.startYear} semester={value.semester}
-                                     availablePlaces={value.remainingSlotsCount} allPlaces={value.maximumStudentsCount} status={value.status}></CoursesItem>
+                        <CoursesItem title={value.name}
+                                     key={value.id}
+                                     id={value.id}
+                                     date={value.startYear}
+                                     semester={value.semester}
+                                     availablePlaces={value.remainingSlotsCount}
+                                     allPlaces={value.maximumStudentsCount}
+                                     status={value.status}></CoursesItem>
                     ))}
                 </div>
             </div>

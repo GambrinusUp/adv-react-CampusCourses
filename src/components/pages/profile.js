@@ -6,6 +6,7 @@ import {editProfile, getProfile} from "../store/authorizeReducer";
 import {useForm} from "antd/es/form/Form";
 import moment from "moment";
 import {useNavigate} from "react-router-dom";
+import styles from './style.module.css'
 
 const Profile = () => {
     const fullName = useSelector(state => state.authorizePage.fullName);
@@ -34,7 +35,7 @@ const Profile = () => {
     
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (token !== null && token !== '') {
+        if (token !== null || token !== '') {
             dispatch(getProfile(token))
                 .then(() => {
                     let dateMoment = moment(date, 'YYYY-MM-DD');
@@ -73,7 +74,7 @@ const Profile = () => {
     };
     
     return (
-        <div style={{backgroundColor: "#EBF5EE", width: "100%", height: "1000px"}}>
+        <div className={styles.container}>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", fontSize: "46px" }}>
                 {contextHolder}
                 <Card
@@ -106,28 +107,38 @@ const Profile = () => {
                         rules={[{ required: true, message: 'Пожалуйста, введите ФИО' }]}
                         style={{minWidth: 800, width: "100%", paddingTop: "30px"}}
                     >
-                        <Input  prefix={<UserOutlined style={{ fontSize: '20px'}} />} placeholder="Name" style={{ height: "50px" }}/>
+                        <Input  prefix={<UserOutlined style={{ fontSize: '20px'}} />}
+                                placeholder="Name"
+                                style={{ height: "50px" }}/>
                     </Form.Item>
                     <Form.Item
                         name="email"
                         rules={[{ required: true, message: 'Пожалуйста, введите Email' }]}
                         style={{minWidth: 800, width: "100%", paddingTop: "30px"}}
                     >
-                        <Input type="email" disabled={true} prefix={<MailOutlined style={{ fontSize: '20px'}} />} placeholder="Email" style={{ height: "50px" }}/>
+                        <Input type="email"
+                               disabled={true}
+                               prefix={<MailOutlined style={{ fontSize: '20px'}} />}
+                               placeholder="Email"
+                               style={{ height: "50px" }}/>
                     </Form.Item>
                     <Form.Item
                         name="birthday"
                         rules={[{ required: true, message: 'Пожалуйста, выберите дату рождения' }]}
                         style={{minWidth: 800, width: "100%", paddingTop: "30px"}}
                     >
-                        <DatePicker style={{ width: '100%', height: "50px" }} format={'YYYY-MM-DD'} />
+                        <DatePicker style={{ width: '100%', height: "50px" }}
+                                    format={'YYYY-MM-DD'} />
                     </Form.Item>
                     <Form.Item style={{paddingTop: "40px"}}>
-                        <Button type="primary" htmlType="submit" className="login-form-button" style={{backgroundColor: "#BFA89E",
-                            width: "160px",
-                            height: "50px",
-                            fontSize: "20px"}}>
-                            Изменить
+                        <Button type="primary"
+                                htmlType="submit"
+                                className="login-form-button"
+                                style={{backgroundColor: "#BFA89E",
+                                width: "160px",
+                                height: "50px",
+                                fontSize: "20px"}}>
+                                Изменить
                         </Button>
                     </Form.Item>
                 </Form>

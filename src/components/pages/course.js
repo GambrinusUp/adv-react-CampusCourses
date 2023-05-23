@@ -12,6 +12,7 @@ import {
 } from "../store/coursesReducer";
 import {useDispatch, useSelector} from "react-redux";
 import ReactQuill from "react-quill";
+import styles from './style.module.css'
 
 function Course() {
     const details = useSelector((state) => state.coursesPage.details);
@@ -34,7 +35,7 @@ function Course() {
     const [studentVisible, setStudentVisible] = useState(false);
     const [teacher, setTeacher] = useState('');
     const [student, setStudent] = useState('');
-    const [mark, setMark] = useState('NotDefined')
+    const [mark, setMark] = useState('Passed')
     const [markType, setMarkType] = useState('');
     const [studentId, setStudentId] = useState('');
 
@@ -104,6 +105,8 @@ function Course() {
                 success("Teacher added");
                 dispatch(loadDetailsThunkCreator(token, id));
             });
+        } else {
+            warning("Choose a teacher");
         }
         setTeacher('');
         setTeacherVisible(false);
@@ -188,41 +191,46 @@ function Course() {
 
 
     return (
-        <div style={{ backgroundColor: "#EBF5EE", width: "100%", minHeight: "1000px"}}>
-            <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
+        <div className={styles.container2}>
+            <div className={styles.cardDeck}>
                 {contextHolder}
-                <div className="details" style={{minWidth: 600, width: "50vw"}}>
-                    <div
-                        style={{
-                            paddingTop: 90,
-                            fontStyle: "normal",
-                            fontSize: "60px",
-                            color: "#283044",
-                            paddingBottom: 20
-                        }}
-                    >
+                <div className={styles.details}>
+                    <div className={styles.title2}>
                         {details.name}
                     </div>
-                    <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+                    <div className={styles.titleBetween}>
                         Основные данные курса
-                        {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) && (<div>
+                        {(isAdmin || (isTeacher && details && details.teachers &&
+                            details.teachers.some(teacher => teacher.email === localStorage.getItem("user"))))
+                            && (<div>
                             {isAdmin && (
                                 <Popconfirm
                                     title="Вы хотите удалить курс?"
                                     onConfirm={deleteCourse}
                                     okText="Да"
-                                    cancelText="Нет"
-                                >
-                                    <Button type="primary" style={{marginRight: "10px", backgroundColor:"#DF8280", color: "#283044"}}>Удалить курс</Button>
+                                    cancelText="Нет">
+                                    <Button
+                                        type="primary"
+                                        style={{marginRight: "10px", backgroundColor:"#DF8280", color: "#283044"}}>
+                                        Удалить курс
+                                    </Button>
                                 </Popconfirm>
                             )}
-                            <Button type="primary" style={{marginRight: "10px", backgroundColor:"#EEE8A9", color: "#283044"}}
-                            onClick={() => {setEditVisible(true); setRequirements(details.requirements);
-                                setAnnotations(details.annotations)}}>Редактировать</Button>
+                            <Button
+                                type="primary"
+                                style={{marginRight: "10px", backgroundColor:"#EEE8A9", color: "#283044"}}
+                                onClick={() => {setEditVisible(true); setRequirements(details.requirements);
+                                setAnnotations(details.annotations)}}>
+                                Редактировать
+                            </Button>
                         </div>)}
                     </div>
-                    <CourseDetailsItem id={id} status={details.status} startYear={details.startYear} semester={details.semester}
-                    allPlaces={details.maximumStudentsCount} studentsEnrolledCount={details.studentsEnrolledCount}
+                    <CourseDetailsItem id={id}
+                                       status={details.status}
+                                       startYear={details.startYear}
+                                       semester={details.semester}
+                                       allPlaces={details.maximumStudentsCount}
+                                       studentsEnrolledCount={details.studentsEnrolledCount}
                                        showButton={details.students}
                                        studentsInQueueCount={details.studentsInQueueCount}
                                        teachers={details.teachers}
@@ -252,9 +260,13 @@ function Course() {
                             <span style={{display:"flex", alignItems:"center"}}>
                                 Уведомления
                                 <Badge count={Object(details.notifications).length} style={{ marginLeft: 8 }} />
-                            </span>
-                        } key="3">
-                            {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) && (<Button onClick={() => {setNotificationVisible(true)}} icon={<PlusOutlined/>} type="primary">
+                            </span>}
+                                 key="3">
+                            {(isAdmin || (isTeacher && details && details.teachers &&
+                                details.teachers.some(teacher => teacher.email === localStorage.getItem("user"))))
+                                && (<Button onClick={() => {setNotificationVisible(true)}}
+                                            icon={<PlusOutlined/>}
+                                            type="primary">
                                 Создать уведомление
                             </Button>)}
                             <List
@@ -262,7 +274,8 @@ function Course() {
                                 size="large"
                                 dataSource={details.notifications}
                                 renderItem={(item) => (
-                                    <List.Item style={{backgroundColor: item.isImportant ? "rgb(255,0,0, 0.1)" : "transparent"}}>
+                                    <List.Item
+                                        style={{backgroundColor: item.isImportant ? "rgb(255,0,0, 0.1)" : "transparent"}}>
                                         {item.text}
                                     </List.Item>
                                 )}
@@ -313,12 +326,15 @@ function Course() {
                                                 {item.email}
                                             </div>
                                         </div>
-                                        {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user"))) || item.email === localStorage.getItem("user")) && (
+                                        {(isAdmin || (isTeacher && details && details.teachers
+                                            && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))
+                                            || item.email === localStorage.getItem("user")) && (
                                             <>
                                                 <div style={{ width: "33%" }}>
                                                     {item.status === 'Accepted' && (
                                                         <>
-                                                            {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) ? (
+                                                            {(isAdmin || (isTeacher && details && details.teachers
+                                                                && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) ? (
                                                                 <a href="#" onClick={(event) => { event.preventDefault();
                                                                 setMarkType('Midterm'); setStudentVisible(true);
                                                                 setStudent(item.name); setStudentId(item.id);}}>
@@ -329,7 +345,8 @@ function Course() {
                                                                     {'Промежуточная аттестация - '}
                                                                 </>
                                                             )}
-                                                            <Button size="small" type="text" style={{fontSize: '12px', backgroundColor: statusResultColors[item.midtermResult],
+                                                            <Button size="small" type="text"
+                                                                    style={{fontSize: '12px', backgroundColor: statusResultColors[item.midtermResult],
                                                                 color: '#fff', border: 'none', cursor: 'default' }}>
                                                                 {item.midtermResult}
                                                             </Button>
@@ -339,7 +356,8 @@ function Course() {
                                                 <div style={{ width: "33%" }}>
                                                     {item.status === 'Accepted' && (
                                                         <>
-                                                            {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) ? (
+                                                            {(isAdmin || (isTeacher && details && details.teachers
+                                                                && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) ? (
                                                                 <a href="#" onClick={(event) => { event.preventDefault();
                                                                     setMarkType('Final'); setStudentVisible(true);
                                                                     setStudent(item.name);setStudentId(item.id);}}>
@@ -361,7 +379,9 @@ function Course() {
                                                             </Button>
                                                         </>
                                                     )}
-                                                    {(isAdmin || (isTeacher && details && details.teachers && details.teachers.some(teacher => teacher.email === localStorage.getItem("user")))) && item.status === 'InQueue' && (
+                                                    {(isAdmin || (isTeacher && details && details.teachers
+                                                        && details.teachers.some(teacher => teacher.email === localStorage.getItem("user"))))
+                                                        && item.status === 'InQueue' && (
                                                         <>
                                                             <Button type="primary" style={{marginRight:"10px"}}
                                                             onClick={() => {changeStatusStudent(item.id, "Accepted")}}>принять</Button>

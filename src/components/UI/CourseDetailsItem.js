@@ -12,7 +12,7 @@ function CourseDetailsItem(props) {
     const isAdmin = useSelector((state) => state.authorizePage.isAdmin);
     const isTeacher = useSelector((state) => state.authorizePage.isTeacher);
     const error = useSelector((state) => state.coursesPage.error);
-    const [value, setValue] = useState(props.status);
+    const [value, setValue] = useState('OpenForAssigning');
     const [open, setOpen] = useState(false);
     const [messageApi, contextHolder] = message.useMessage();
     const [errorShown, setErrorShown] = useState(false);
