@@ -4,6 +4,7 @@ import GroupsItem from "../UI/GroupsItem";
 import {addGroupThunkCreator, loadGroupsThunkCreator} from "../store/groupsReducer";
 import {Button, Input, message, Modal} from "antd";
 import {useNavigate} from "react-router-dom";
+import styles from './style.module.css'
 
 function Groups() {
     const groups = useSelector((state) => state.groupsPage.groups);
@@ -61,22 +62,15 @@ function Groups() {
     }, [dispatch, navigate]);
 
     return (
-        <div style={{ backgroundColor: "#EBF5EE", width: "100%", minHeight: "1000px"}}>
-            <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
+        <div className={styles.container2}>
+            <div className={styles.cardDeck}>
                 {contextHolder}
                 <div className="card-deck">
-                    <div
-                        style={{
-                            paddingTop: 90,
-                            fontStyle: "normal",
-                            fontSize: "60px",
-                            color: "#283044",
-                        }}
-                    >
+                    <div className={styles.title2}>
                         Группы кампусных курсов
                     </div>
                     {isAdmin && (<Button style={{backgroundColor: "#7A80AC",  width: "160px",
-                        height: "50px", fontSize: "20px", marginTop:"20px", marginBottom:"20px"}}
+                        height: "50px", fontSize: "20px", marginBottom:"20px"}}
                             onClick={() => setOpen(true)}>Создать</Button>)}
                     {groups.map((value) => (
                         <GroupsItem content={value.name} key={value.id} showButtons={isAdmin} id={value.id}/>

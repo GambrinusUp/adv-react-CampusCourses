@@ -5,8 +5,10 @@ import { Button, Form, Input } from 'antd';
 import {registration1} from "../store/authorizeReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-const dateFormat = 'YYYY-MM-DD';
+import styles from './style.module.css'
+
 const Registration = () => {
+    const dateFormat = 'YYYY-MM-DD';
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const errors = useSelector((state) => state.authorizePage.errors);
@@ -23,7 +25,8 @@ const Registration = () => {
     const onFinish = (values) => {
         console.log(values.date.format(dateFormat));
         console.log(values);
-        dispatch(registration1(values.username, values.date.format(dateFormat) + 'T12:05:39.949Z', values.email, values.password1, values.password2))
+        dispatch(registration1(values.username, values.date.format(dateFormat) + 'T12:05:39.949Z',
+            values.email, values.password1, values.password2))
             .then(() => {
                 console.log("Logged in successfully");
                 navigate('/', {replace: true});
@@ -47,32 +50,16 @@ const Registration = () => {
     }, [dispatch, errors, warning]);
 
     return (
-        <div style={{backgroundColor: "#EBF5EE", width: "100%", height: "1000px"}}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+        <div className={styles.container}>
+            <div className={styles.cardDeck}>
                 {contextHolder}
-                <Card
-                    style={{
-                        minWidth: 1000,
-                        width: "70%",
-                        height: 800,
-                        backgroundColor: "#78A1BB",
-                        borderRadius: "20px"
-                    }}
-                >
-                    <div style={{
-                        paddingTop: 40,
-                        fontStyle: "normal",
-                        fontSize: "60px",
-                        display: "flex",
-                        justifyContent: "center",
-                        color: "#FFFFFF"
-                    }}>Регистрация нового пользователя</div>
-                    <div style={{ display:"flex", textAlign: "center", justifyContent: "center"}}>
+                <Card className={styles.authCard}>
+                    <div className={styles.title}>Регистрация нового пользователя</div>
+                    <div className={styles.authFormContainer}>
                         <Form
                             name="normal_login"
                             className="login-form"
-                            onFinish={onFinish}
-                        >
+                            onFinish={onFinish}>
                             <Form.Item
                                 name="username"
                                 rules={[
@@ -81,9 +68,10 @@ const Registration = () => {
                                         message: 'Please input your name!',
                                     },
                                 ]}
-                                style={{paddingTop: "40px", minWidth: 800, width: "100%"}}
-                            >
-                                <Input prefix={<UserOutlined style={{ fontSize: '20px'}} />} placeholder="Name" style={{ height: "50px" }}/>
+                                className={styles.authFormItem}>
+                                <Input prefix={<UserOutlined style={{ fontSize: '20px'}} />}
+                                       placeholder="Name"
+                                       style={{ height: "50px" }}/>
                             </Form.Item>
                             <Form.Item
                                 name="date"
@@ -93,15 +81,13 @@ const Registration = () => {
                                         message: 'Please input your birthdate!',
                                     },
                                 ]}
-                                style={{paddingTop: "20px"}}
-                            >
+                                style={{paddingTop: "20px"}}>
                                 <DatePicker
                                     prefix={<LockOutlined className="site-form-item-icon" style={{ fontSize: '20px'}} />}
                                     type="date"
                                     format={dateFormat}
                                     placeholder="Date"
-                                    style={{ height: "50px", minWidth: 800, width: "100%"}}
-                                />
+                                    style={{ height: "50px", minWidth: 800, width: "100%"}}/>
                             </Form.Item>
                             <Form.Item
                                 name="email"
@@ -111,9 +97,10 @@ const Registration = () => {
                                         message: 'Please input your Email!',
                                     },
                                 ]}
-                                style={{paddingTop: "20px", minWidth: 800, width: "100%"}}
-                            >
-                                <Input prefix={<MailOutlined style={{ fontSize: '20px'}} />} placeholder="Email" style={{ height: "50px" }}/>
+                                className={styles.regFormItem}>
+                                <Input prefix={<MailOutlined style={{ fontSize: '20px'}} />}
+                                       placeholder="Email"
+                                       style={{ height: "50px" }}/>
                             </Form.Item>
                             <Form.Item
                                 name="password1"
@@ -123,14 +110,12 @@ const Registration = () => {
                                         message: 'Please input your Password!',
                                     },
                                 ]}
-                                style={{paddingTop: "20px", minWidth: 800, width: "100%"}}
-                            >
+                                className={styles.regFormItem}>
                                 <Input
                                     prefix={<LockOutlined className="site-form-item-icon" style={{ fontSize: '20px'}} />}
                                     type="password"
                                     placeholder="Password"
-                                    style={{ height: "50px" }}
-                                />
+                                    style={{ height: "50px" }}/>
                             </Form.Item>
                             <Form.Item
                                 name="password2"
@@ -140,22 +125,23 @@ const Registration = () => {
                                         message: 'Please input your Password!',
                                     },
                                 ]}
-                                style={{paddingTop: "20px", minWidth: 800, width: "100%"}}
-                            >
+                                className={styles.regFormItem}>
                                 <Input
                                     prefix={<LockOutlined className="site-form-item-icon" style={{ fontSize: '20px'}} />}
                                     type="password"
                                     placeholder="Password"
-                                    style={{ height: "50px" }}
-                                />
+                                    style={{ height: "50px" }}/>
                             </Form.Item>
                             <Form.Item
-                                style={{paddingTop: "20px", minWidth: 800, width: "100%"}}>
-                                <Button type="primary" htmlType="submit" className="login-form-button" style={{backgroundColor: "#BFA89E",
-                                    width: "160px",
+                                className={styles.regFormItem}>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    className="login-form-button"
+                                    style={{backgroundColor: "#BFA89E",
                                     height: "50px",
                                     fontSize: "20px"}}>
-                                    Register
+                                Зарегистрироваться
                                 </Button>
                             </Form.Item>
                         </Form>

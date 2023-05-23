@@ -69,6 +69,7 @@ const Navbar = () => {
             setIsLoggedIn(true);
             dispatch(getUserRole(token)).catch(() => {
                 localStorage.setItem("token", '');
+                setIsLoggedIn(false);
                 navigate('/', {replace: true});
             });
         } else {
@@ -99,14 +100,14 @@ const Navbar = () => {
                         <Link to="/groups" style={styles.navbar_text_after_title}>Группы курсов</Link>
                     </>
                 )}
-                {isLoggedIn && isStudent && !isAdmin && (
+                {isLoggedIn && (
                     <>
-                        <Link to="/groups" style={styles.navbar_text_after_title}>Мои курсы</Link>
+                        <Link to="/courses/my" style={styles.navbar_text_after_title}>Мои курсы</Link>
                     </>
                 )}
-                {isLoggedIn && isTeacher && !isAdmin && (
+                {isLoggedIn && isTeacher && (
                     <>
-                        <Link to="/groups" style={styles.navbar_text_after_title}>Преподаваемые курсы</Link>
+                        <Link to="/courses/teaching" style={styles.navbar_text_after_title}>Преподаваемые курсы</Link>
                     </>
                 )}
             </div>

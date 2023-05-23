@@ -1,0 +1,72 @@
+.container {
+    background-color: #EBF5EE;
+    width: 100%;
+    height: 1000px;
+}
+
+.cardDeck {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.authCard {
+    min-width: 1000px;
+    width: 70%;
+    height: 800px;
+    background-color: #78A1BB;
+    border-radius: 20px;
+}
+
+.title {
+    padding-top: 50px;
+    font-style: normal;
+    font-size: 60px;
+    display: flex;
+    justify-content: center;
+    color: #FFFFFF;
+}
+
+.authFormContainer {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.authFormItem {
+    padding-top: 40px;
+    min-width: 800px;
+    width: 100%;
+}
+
+.regFormItem {
+    padding-top: 20px;
+    min-width: 800px;
+    width: 100%;
+}
+
+.container2 {
+    background-color: #EBF5EE;
+    width: 100%;
+    min-height: 1000px;
+}
+
+.title2 {
+    padding-top: 90px;
+    font-style: normal;
+    font-size: 60px;
+    color: #283044;
+    padding-bottom: 20px;
+}
+
+.titleBetween {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.details {
+    min-width: 600px;
+    width: 50vw;
+}

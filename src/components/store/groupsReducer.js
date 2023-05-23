@@ -1,6 +1,6 @@
 import {groupsAPI} from "../API/groupsAPI";
 
-const LOAD_GROUPS = "LOAD_GROUPS";
+const LOAD_GROUPS = "LOAD_GROUPS"
 const ADD_GROUP = "ADD_GROUP"
 const EDIT_GROUP = "EDIT_GROUP"
 const DELETE_GROUP = "DELETE_GROUP"

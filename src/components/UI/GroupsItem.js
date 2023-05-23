@@ -1,7 +1,8 @@
-import {Button, Card, Input, message, Modal} from "antd";
+import {Button, Card, Input, message, Modal, Popconfirm} from "antd";
 import {useDispatch} from "react-redux";
 import {useState} from "react";
 import {deleteGroupThunkCreator, editGroupThunkCreator, loadGroupsThunkCreator} from "../store/groupsReducer";
+import {Link} from "react-router-dom";
 
 function GroupsItem(props){
     const dispatch = useDispatch();
@@ -63,17 +64,25 @@ function GroupsItem(props){
     return(
         <>
             {contextHolder}
-            <Card style={{margin: "auto 0", marginBottom: "35px", display: "flex",
+            <Card style={{margin: "auto 0", marginBottom: "15px", display: "flex",
                 backgroundColor: "#78A1BB", fontSize: "30px", color: "#FFFFFF"}}
             id={props.id}>
                 <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 600, width: "50vw"}}>
-                    <div>{props.content}</div>
+                    <div><Link to={`/groups/${props.id}`} style={{ color: '#fff' }}>
+                        {props.content}
+                    </Link></div>
                     {props.showButtons && (
                         <div style={{display: "flex", alignItems: "center"}}>
                             <Button type="primary" style={{marginRight: "10px", backgroundColor:"#EEE8A9", color: "#283044"}}
                                     onClick={() => {setOpenEdit(true); setGroupName(props.content)}}>Редактировать</Button>
-                            <Button type="primary" style={{backgroundColor: "#DF8280", color: "#283044"}}
-                                    onClick={deleteGroup}>Удалить</Button>
+                            <Popconfirm
+                                title="Вы хотите удалить группу?"
+                                onConfirm={deleteGroup}
+                                okText="Да"
+                                cancelText="Нет"
+                            >
+                                <Button type="primary" style={{backgroundColor: "#DF8280", color: "#283044"}}>Удалить</Button>
+                            </Popconfirm>
                         </div>
                     )}
                 </div>

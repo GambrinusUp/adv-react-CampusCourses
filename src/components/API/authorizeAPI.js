@@ -83,6 +83,7 @@ function role(token) {
         },
     })
         .then((response) => {
+            console.log(response.data);
             return {status: response.status, role: response.data};
         })
         .catch((error) => {
